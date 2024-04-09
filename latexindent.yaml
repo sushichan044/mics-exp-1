@@ -1,0 +1,7 @@
+replacements:
+  - this: "、"
+    that: ","
+    lookForThis: 1
+  - this: "。"
+    that: "."
+    lookForThis: 1
