@@ -1,25 +1,28 @@
 {
   "[latex]": {
-      "editor.formatOnSave": true,
-      "editor.defaultFormatter": "James-Yu.latex-workshop",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "James-Yu.latex-workshop"
+  },
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
   },
   "latex-workshop.latexindent.path": "latexindent",
   "latex-workshop.latexindent.args": [
-      "%TMPFILE%",
-      "-c",
-      "%WORKSPACE_FOLDER%/",
-      "-l",
-      "%WORKSPACE_FOLDER%/latexindent.yaml",
-      "-r"
+    "%TMPFILE%",
+    "-c",
+    "%WORKSPACE_FOLDER%/",
+    "-l",
+    "%WORKSPACE_FOLDER%/latexindent.yaml",
+    "-r"
   ],
   "[python]": {
-      "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "editor.formatOnSave": true,
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
   "python.languageServer": "Pylance",
   "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit"
+    "source.fixAll": "explicit"
   }
 }

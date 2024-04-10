@@ -82,12 +82,32 @@ void read_graph(FILE *fp, graph *g) {
 }
 
 void remove_edge(graph *g, int x, int y) {
-  /** �������e������������ **/
-  return;
+  if (is_edge(g, x, y)) {
+    int i;
+    for (i = 0; i < g->degree[x]; i++) {
+      // is_edge(g, x, y)が真であるので、g->degree[x][i] == yとなるiは必ず存在
+      // よって必ずbreakするしこのfor-loopは安全
+      if (g->edges[x][i] == y) {
+        break;
+      }
+    }
+    for (; i < g->degree[x] - 1; i++) {
+      g->edges[x][i] = g->edges[x][i + 1];
+    }
+    g->degree[x]--;
+    g->nedges--;
+    return;
+  }
+  fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
 }
 
 void reorient_edge(graph *g, int x, int y) {
-  /** �������e������������ **/
+  if (is_edge(g, x, y)) {
+    remove_edge(g, x, y);
+    insert_edge(g, y, x);
+  } else {
+    fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
+  }
   return;
 }
 

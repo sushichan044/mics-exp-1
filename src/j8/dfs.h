@@ -2,6 +2,7 @@
 #define DFS_H_INCLUDED
 
 #include <stdio.h>
+
 #include "graph.h"
 
 /* ****************** */
@@ -9,42 +10,49 @@
 /* ****************** */
 
 typedef struct {
-	int visited[MAXV];
-	int predecessor[MAXV];
+  int visited[MAXV];
+  int predecessor[MAXV];
 } dfs_info;
 
-void initialize_search(graph *g, dfs_info *d_i)
-{
+void initialize_search(graph *g, dfs_info *d_i) {
   int i;
   for (i = 0; i < g->nvertices; i++) {
-    d_i->visited[i]     =  0;
+    d_i->visited[i] = 0;
     d_i->predecessor[i] = -1;
   }
   return;
 }
 
-void dfs(graph *g, dfs_info *d_i, int start)
-{
-	/** �������e������������ **/
+// 資料P.16のアルゴリズムを愚直に実装するだけ〜
+void dfs(graph *g, dfs_info *d_i, int start) {
+  // startを訪問済みとする
+  d_i->visited[start] = 1;
+  for (int i = 0; i < g->degree[start]; i++) {
+    // 訪問済みじゃないやつに対して...
+    // 訪問済みをたどってしまうと往復してしまうよねー
+    if (d_i->visited[g->edges[start][i]] == 0) {
+      // 再帰的にDFSを行う
+      d_i->predecessor[g->edges[start][i]] = start;
+      dfs(g, d_i, g->edges[start][i]);
+    }
+  }
   return;
 }
 
-void print_predecessors(graph *g, dfs_info *d_i)
-{
-	int i;
-  for(i = 0; i < g->nvertices; i++) {
+void print_predecessors(graph *g, dfs_info *d_i) {
+  int i;
+  for (i = 0; i < g->nvertices; i++) {
     printf("%d: predecessor[%d] = %d\n", i, i, d_i->predecessor[i]);
   }
-	return;
+  return;
 }
 
-void print_visited_vertices(graph *g, dfs_info *d_i)
-{
-	int i;
-  for(i = 0; i < g->nvertices; i++) {
+void print_visited_vertices(graph *g, dfs_info *d_i) {
+  int i;
+  for (i = 0; i < g->nvertices; i++) {
     printf("%d: visited[%d] = %d\n", i, i, d_i->visited[i]);
   }
-	return;
+  return;
 }
 
 #endif

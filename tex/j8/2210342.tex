@@ -136,534 +136,122 @@
 
 \section{課題1}
 \label{sec:ex-1}
-変数$x$の値を1.29に設定した.これは棗いつきさんという私が個人的に好きなシンガーの方の名前の語呂合わせである.
-いい曲をたくさん出されているのでぜひ一度聴いてみて欲しい.
-他の方がどのくらいエピソードを書いているかわからないが,私は本当にただの語呂合わせなのでこれだけしか書けない.
-本題に移る.
 
-課題を始める前にIEEE754で規定されている倍精度浮動小数点の数式を\ref{eq:ieee754}に示しておく.\\
-$s$は符号部, $e$は指数部, $f$は仮数部である.
+実験資料を参考に,\ref{code:ex-1}のようにremove\_edge関数及びreorient\_edge関数を実装した.
 
-\begin{equation}
-	\label{eq:ieee754}
-	(-1)^s \times 2^{e-1023} \times 1.f
-\end{equation}
 
-では$1.29$をIEEE754で表現するとどうなるかを考える.
-まず符号部は,1.29が正の値であるから$s=0$である.
-次に指数部は,$2^0 \leq 1.29 < 2^1$であるから$e - 1023 = 0$である.
-よって$e = 1023$であり,これを11桁の2進数で表すと$01111111111$となる.
-最後に仮数部は,$0.29$を2進数に変換することで表すことができる.
-これを手計算\footnote{きちんと手計算しました.必要なら電子ノートを提出できます.}したところ,
-\ref{eq:0.29}のようになった.ここから,$64 - 1 - 11 = 52$桁を取り出したものが仮数部であるはずである.
+\begin{lstlisting}[language={C}, caption={実装したremove\_edge関数及びreorient\_edge関数のソースコード}, label={code:ex-1}]
+void remove_edge(graph *g, int x, int y) {
+  if (is_edge(g, x, y)) {
+    int i;
+    for (i = 0; i < g->degree[x]; i++) {
+  	// is_edge(g, x, y)が真であるので,g->degree[x][i] == yとなるiは必ず存在
+  	// よって必ずbreakするしこのfor-loopは安全
+  	if (g->edges[x][i] == y) {
+  	  break;
+  	}
+    }
+    for (; i < g->degree[x] - 1; i++) {
+  	g->edges[x][i] = g->edges[x][i + 1];
+    }
+    g->degree[x]--;
+    g->nedges--;
+    return;
+  }
+  fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
+}
 
-\begin{equation}
-	\label{eq:0.29}
-	0.29_{10} = 0.01\dot{0}010100011110101110\dot{0} \cdots_2
-\end{equation}
+void reorient_edge(graph *g, int x, int y) {
+  if (is_edge(g, x, y)) {
+    remove_edge(g, x, y);
+    insert_edge(g, y, x);
+  } else {
+    fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
+  }
+  return;
+}
+\end{lstlisting}
 
-ここで,実際に演習資料として配布されたbit.cを用いて$1.29$の浮動小数点を出力した.
-変数に代入する値を変更しただけであるためソースコードは省略する.
-この出力は下のようになった.なお,循環小数部分がわかりやすいように縦線を挿入しているため
-出力そのままではない.
+また,配布されたテストプログラムを用いてこれらの関数を含む処理を実行した結果を
 
 \begin{verbatim}
-> ./bit
-0 01111111111 01|00101000111101011100|00101000111101011100|0010100100
+\label{verb:ex-1-1}
+> ./kadai1main kadai1/input.txt
+0: 1 2
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+***** insert an edge (input two numbers):
+0 3
+0: 1 2 3
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 3
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 12
+***** remove an edge (input two numbers):
+0 1
+0: 2 3
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+***** reorient an edge (input two numbers):
+0 2
+0: 3
+1: 3 5
+2: 3 4 0
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 1
+degree[1]: 2
+degree[2]: 3
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
 \end{verbatim}
-\label{verb:bit}
-
-これを見ると,上2桁とそこから2回の循環部分までは手計算した仮数部と一致しているが,
-3回目の循環の仮数部が一致していないことがわかる.これは,浮動小数点では循環小数を有限桁で表現することができないためである.
-これにより,上位52桁を取り出す際に丸めが発生し,誤差が生じていると考えられる.
-
-\newpage
-
-\section{課題2}
-
-「せいぜい十分小さな値」$h$を用いて数値微分を行う際の近似式は\ref{eq:delta}のようになる.
-
-\begin{equation}
-	\label{eq:delta}
-	\frac{df}{dx} \approx \frac{f(x + h / 2) - f(x - h / 2)}{h}
-\end{equation}
-
-「せいぜい十分小さな値」を$10^0$から$10^{-14}$まで0.1刻みで小さくした際の
-微分値や相対誤差を調べる.念のため使用したソースコードを\ref{code:ex-2}に示す.
-
-\begin{lstlisting}[language={C}, caption={課題2で使用したソースコード}, label={code:ex-2}]
-#include <math.h>
-#include <stdio.h>
-
-double f(double x) { return sin(x); }
-
-void print_delta(double h) {
-  double x = M_PI / 4.0;
-  double dfdx = (f(x + h / 2.0) - f(x - h / 2.0)) / h;
-  double relerr = fabs(dfdx - cos(x)) / fabs(cos(x));
-  printf("%1.14f %1.14f %1.14f\n", h, dfdx, relerr);
-}
-
-int main(void) {
-  double h_array[] = {1e0,  1e-1, 1e-2,  1e-3,  1e-4,  1e-5,  1e-6, 1e-7,
-                      1e-8, 1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 1e-14};
-  for (int i = 0; i < 15; i++) {
-    print_delta(h_array[i]);
-  }
-}
-
-\end{lstlisting}
-
-これによって得られた出力を基に\ref{table:ex-2}を作成した.
-表より,以下のことがわかる.
-
-まず,微分値および誤差は$h=10^{0}$のときを除くと0.01刻みで見た際にあまり大きな差は見られない.
-$h=10^{0}$のときは単純に$h$が大きすぎるために\ref{eq:delta}でいう分母が広くなり,大きな誤差が生じていると考えられる.
-
-次に残りの誤差などについて考察していく.最も誤差が小さかったのは$h=10^{-5}$のときであった.
-誤差は最も小さくなるのは$h$が最も小さくなるときであると考えていたが実際には異なった.
-これは,$h$が小さくなりすぎると,それを有限桁の倍精度浮動小数点数で表現する際に発生する
-丸め誤差が自身に対して無視できない大きさになるため,かえって誤差が大きくなっているものだと考えられる.
-つまり,$h=10^{-5}$程度が,倍精度浮動小数点数で誤差を最大限抑えながら表現できる下限であり,
-より小さい$h$を用いたければ,より高精度な浮動小数点数を用いる必要があるとも考えられる.
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[htbp]
-	\centering
-	\caption{課題2の出力から得られた値}
-	\label{table:ex-2}
-	\begin{tabular}{@{}ccc@{}}
-		\toprule
-		小さな値             & 微分値              & 相対誤差             \\ \midrule
-		1.00000000000000 & 0.67801009884209 & 0.04114892279159 \\
-		0.10000000000000 & 0.70681219018734 & 0.00041661458643 \\
-		0.01000000000000 & 0.70710383491198 & 0.00000416666145 \\
-		0.00100000000000 & 0.70710675172370 & 0.00000004166676 \\
-		0.00010000000000 & 0.70710678089170 & 0.00000000041698 \\
-		0.00001000000000 & 0.70710678118369 & 0.00000000000405 \\
-		0.00000100000000 & 0.70710678112818 & 0.00000000008255 \\
-		0.00000010000000 & 0.70710678090613 & 0.00000000039657 \\
-		0.00000001000000 & 0.70710677313457 & 0.00000001138722 \\
-		0.00000000100000 & 0.70710681754349 & 0.00000005141648 \\
-		0.00000000010000 & 0.70710659549889 & 0.00000026260201 \\
-		0.00000000001000 & 0.70711214661401 & 0.00000758786028 \\
-		0.00000000000100 & 0.70710104438376 & 0.00000811306430 \\
-		0.00000000000010 & 0.70721206668622 & 0.00014889618156 \\
-		0.00000000000001 & 0.69944050551385 & 0.01084175102922 \\ \bottomrule
-	\end{tabular}
-\end{table}
-
-\section{課題3}
-\label{sec:ex-3}
-
-実数解を持つ適当な非線形方程式を選び,ニュートン法を用いて解を求める.
-今回は\ref{eq:ex-3}を用いる.
-課題を解くのに用いたソースコードを\ref{code:ex-3}に示す.
-
-\begin{equation}
-	\label{eq:ex-3}
-	f(x) = e^x + \sin(x) - 3x^2 + 2x + 5 = 0
-\end{equation}
-
-なお,事前に初期値0を用いて解を計算しており,$-0.94$付近であることを確認しており,
-比較に使用する解として$-0.9460532773247446$を用いた.
-\ref{code:ex-3}では初期値として$-17.0$, $-5.0$, $-3.0$, $-1.0$, $1.0$, $15.0$の6つを用いた.
-このプログラムの出力から\ref{table:ex-3}を作成した.
-
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[htbp]
-	\centering
-	\caption{課題3のプログラムの出力から得られた値}
-	\label{table:ex-3}
-	\begin{tabular}{@{}cccc@{}}
-		\toprule
-		初期値   & ステップ数 & 近似解                 & 相対誤差               \\ \midrule
-		-17.0 & 8     & -0.9460532773247448 & 0.0000000000000001 \\
-		-5.0  & 6     & -0.9460532773247449 & 0.0000000000000002 \\
-		-3.0  & 6     & -0.9460532773247448 & 0.0000000000000001 \\
-		-1.0  & 4     & -0.9460532773247448 & 0.0000000000000001 \\
-		1.0   & 19    & -0.9460532773247446 & 0.0000000000000000 \\
-		15.0  & 60    & -0.9460532773247446 & 0.0000000000000000 \\ \bottomrule
-	\end{tabular}
-\end{table}
-
-
-試したどの初期値でも相対誤差は$10^{-16}$程度であり,精度のよい近似解が得られていることがわかる.
-ステップ数については,解の絶対値から同じ絶対値離れると同じステップ数増加すると予想していた.
-実際には初期値が正の方向に大きくなるほどステップ数は大きく増大するが,
-負の方向に大きくなってもステップ数が大きく増大することはなかった.
-
-
-\begin{lstlisting}[language={C}, caption={課題3で使用したソースコード}, label={code:ex-3}]
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#define Epsilon (1e-14)
-// 	f(x) = e^x + \sin(x) - 3x^2 + 2x + 5
-double f(double x) { return exp(x) + sin(x) - 3.0 * x * x + 2.0 * x + 5.0; }
-
-// f'(x) = e^x + \cos(x) - 6x + 2
-double dfdx(double x) { return exp(x) + cos(x) - 6.0 * x + 2.0; }
-
-double newton_method(double (*f)(double), double (*dfdx)(double),
-                     double initial_value, double epsilon) {
-  double x = initial_value;
-
-  int i = 0;
-  while (fabs(f(x)) > epsilon) {
-    fprintf(stderr, "%d %1.16f\n", i, x);
-    x = x - f(x) / dfdx(x);
-    i++;
-  }
-
-  printf("iteration = %d\n", i);
-
-  return x;
-}
-
-int main(void) {
-  double ans = -0.9460532773247446;
-  double initial_value[] = {-17.0, -5.0, -3.0, -1.0, 1.0, 15.0};
-
-  printf("ans = %1.16f\n\n", ans);
-
-  for (int i = 0; i < 6; i++) {
-    double value = initial_value[i];
-    printf("initial value = %1.16f\n", value);
-    double x = newton_method(f, dfdx, value,
-                             Epsilon);  // find x ~= -0.94... from initial_value
-    printf("%1.16f %1.16f\n\n", x, fabs(x - ans));
-  }
-}
-\end{lstlisting}
-
-
-\section{課題4}
-\label{sec:ex-4}
-
-課題3と同様に実数解を持つ適当な非線形方程式を選び,ニュートン法を用いて解を求める.
-今回は\ref{eq:ex-4}を2つの方程式を用いる.実行結果は\ref{table:ex-4}のようになった.
-
-\begin{align}
-	\begin{split}
-		\label{eq:ex-4}
-		f(x) & = x^2 - 2x + 1 \\
-		g(x) & = x^2 - 3x + 2
-	\end{split}
-\end{align}
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[htbp]
-	\centering
-	\caption{課題4のプログラムの出力から得られた値}
-	\label{table:ex-4}
-	\begin{tabular}{@{}cccc@{}}
-		\toprule
-		関数   & ステップ数 & 近似解                & 相対誤差               \\ \midrule
-		f(x) & 20    & 1.0000000954936352 & 0.0000000954936352 \\
-		g(x) & 4     & 0.9999999999999994 & 0.0000000000000006 \\ \bottomrule
-	\end{tabular}
-\end{table}
-
-$f(x)とg(x)$で必要なステップ数が大きく違う原因を考察する.
-$f(X)とg(X)$は,次数は同じであるが,$f(x)$は2重解を持っているという違いがあり,これが
-大きく差が出た原因と考えられる.詳細な考察は\ref{sec:ex-5}で行う.
-
-
-\section{課題5}
-\label{sec:ex-5}
-
-\ref{sec:ex-4}で扱った2つの方程式について,ニュートン法における
-各ステップの相対誤差を計算し,\ref{table:ex-5-f}および\ref{table:ex-5-g}に示した.
-これらから,$f(x)$は1次収束しており,$g(x)$は2次収束していることがわかる.
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[htbp]
-	\centering
-	\caption{課題4の$f(x)$のステップごとの相対誤差}
-	\label{table:ex-5-f}
-	\begin{tabular}{@{}cc@{}}
-		\toprule
-		ステップ数 & 相対誤差               \\ \midrule
-		1     & 0.0500000000000000 \\
-		2     & 0.0250000000000006 \\
-		3     & 0.0124999999999988 \\
-		4     & 0.0062499999999950 \\
-		5     & 0.0031249999999954 \\
-		6     & 0.0015624999999946 \\
-		7     & 0.0007812499999749 \\
-		8     & 0.0003906250000247 \\
-		9     & 0.0001953125001395 \\
-		10    & 0.0000976562501183 \\
-		11    & 0.0000488281251319 \\
-		12    & 0.0000244140632435 \\
-		13    & 0.0000122070303643 \\
-		14    & 0.0000061035110224 \\
-		15    & 0.0000030517538190 \\
-		16    & 0.0000015258743711 \\
-		17    & 0.0000007629151879 \\
-		18    & 0.0000003814973588 \\
-		19    & 0.0000001908810769 \\
-		20    & 0.0000000954936352 \\ \bottomrule
-	\end{tabular}
-\end{table}
-
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-\begin{table}[htbp]
-	\centering
-	\caption{課題4の$g(x)$のステップごとの相対誤差}
-	\label{table:ex-5-g}
-	\begin{tabular}{@{}cc@{}}
-		\toprule
-		ステップ数 & 相対誤差               \\ \midrule
-		1     & 0.0124999999999997 \\
-		2     & 0.0001524390243903 \\
-		3     & 0.0000000232305734 \\
-		4     & 0.0000000000000006 \\ \bottomrule
-	\end{tabular}
-\end{table}
-
-ニュートン法の原理から,重解の場合に収束が遅い理由を考察する.
-ニュートン法は,\ref{eq:newton-rep}のような反復式で表される試行を繰り返すことで解を求める.
-
-\begin{equation}
-	\label{eq:newton-rep}
-	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
-\end{equation}
-
-一般的に,これは2次収束する(誤差が2乗に比例して小さくなる)ことが知られている.
-しかし重解の場合,\ref{eq:newton-rep}の分母の部分が$0$に近似できるため,収束性が悪くなり,
-具体的には1次収束する(誤差が1乗に比例して小さくなる)ことが知られている.
-このため,収束が大幅に遅くなり,また誤差が変化する速度も小さくなるので,
-収束条件ぎりぎりの値が最終的な近似解になり,相対誤差が大きくなったと考えられる.
-
-\newpage
-
-\section{課題6}
-\label{sec:ex-6}
-
-複素解を持つ\ref{eq:ex-6}をニュートン法を用いて解く.
-
-\begin{align}
-	\begin{split}
-		\label{eq:ex-6}
-		z    & = x + iyとしたとき, \\
-		f(z) & = z^2 + 1 = 0
-	\end{split}
-\end{align}
-
-これは,実部と虚部の式を分けて\ref{eq:ex-6-real}および\ref{eq:ex-6-imaginary}のように表すことができる.
-
-\begin{align}
-	f_{real}(x, y) & = x^2 - y^2 + 1 = 0 \label{eq:ex-6-real} \\
-	f_{imag}(x, y) & = 2xy = 0 \label{eq:ex-6-imaginary}
-\end{align}
-
-これを,ニュートン法を多変数関数に適用する際の式に起こしていく.
-$J(x)をf(x)のヤコビ行列としてf(x)をx^{(k)}$のまわりでテイラー展開すると,\ref{eq:taylor}のようになる.
-
-\begin{equation}
-	\label{eq:taylor}
-	f(x)          = f(x^{(k)}) + J(x^{(k)})(x - x^{(k)}) + O(\|x - x^{(k)}\|^2) \\
-\end{equation}
-
-ここで,$f(x) = 0$の代わりに$\tilde{f}(x) \simeq f(x^{(k)}) + J(x^{(k)})(x - x^{(k)}) = 0$を解いてそれを$x^{(k+1)}$とすると,
-\ref{eq:newton-rep-multi}のようになる.
-
-\begin{equation}
-	\label{eq:newton-rep-multi}
-	x^{(k+1)} = x^{(k)} - J(x^{(k)})^{-1}f(x^{(k)})
-\end{equation}
-
-これを\ref{eq:ex-6-real}および\ref{eq:ex-6-imaginary}に適用する.
-まず,ヤコビ行列$J(x)$を求める.これは\ref{eq:jacobian}のようになる.
-
-\begin{align}
-	\begin{split}
-		\label{eq:jacobian}
-		J(x) & = \begin{pmatrix}
-			         \frac{\partial f_{real}}{\partial x} & \frac{\partial f_{real}}{\partial y} \\
-			         \frac{\partial f_{imag}}{\partial x} & \frac{\partial f_{imag}}{\partial y}
-		         \end{pmatrix}
-		\\
-		     & = \begin{pmatrix}
-			         2x & -2y \\
-			         2y & 2x
-		         \end{pmatrix}
-	\end{split}
-\end{align}
-
-よって逆行列$J(x)^{-1}$は\ref{eq:jacobian-inverse}のようになる.
-
-\begin{equation}
-	\label{eq:jacobian-inverse}
-	J(x)^{-1} = \frac{1}{4x^2 + 4y^2} \begin{pmatrix}
-		2x  & 2y \\
-		-2y & 2x
-	\end{pmatrix}
-\end{equation}
-
-\ref{eq:newton-rep-multi}に$J(x)^{-1}$を代入して,この方程式における反復式は\ref{eq:newton-rep-multi-ex-6}のようになる.
-
-\begin{align}
-	\begin{split}
-		\label{eq:newton-rep-multi-ex-6}
-		x^{(k+1)} & = x^{(k)} - \frac{1}{4x^2 + 4y^2} \begin{pmatrix}
-			                                              2x  & 2y \\
-			                                              -2y & 2x
-		                                              \end{pmatrix}
-		\begin{pmatrix}
-			x^2 - y^2 + 1 \\
-			2xy
-		\end{pmatrix}
-		\\
-		          & = x^{(k)} - \frac{1}{4x^2 + 4y^2} \begin{pmatrix}
-			                                              2x(x^2 - y^2 + 1) + 2y(2xy) \\
-			                                              -2y(x^2 - y^2 + 1) + 2x(2xy)
-		                                              \end{pmatrix}
-		\\
-		          & = x^{(k)} - \frac{1}{4x^2 + 4y^2} \begin{pmatrix}
-			                                              2x^3 + 2xy^2 + 2x \\
-			                                              2x^{2}y + 2y^3 - 2y
-		                                              \end{pmatrix}
-	\end{split}
-\end{align}
-
-\ref{eq:newton-rep-multi-ex-6}をもとに実際に解を計算するプログラムをC言語で実装したものが
-\ref{code:ex-6}である.これを実行した出力結果は下の通りである.
-
-\begin{verbatim}
-> ./newton-cplx
-x = -0.0000000000000000, y = 1.0000000000000000
-iterations: 6
-\end{verbatim}
-
-\ref{eq:ex-6}の解は$z = i$であるから,正しい解を求められていることがわかる.
-
-\begin{lstlisting}[language={C}, caption={課題6で使用したソースコード}, label={code:ex-6}]
-#include <math.h>
-#include <stdio.h>
-
-#define Epsilon (1e-14)
-
-double f_re(double x, double y) { return x * x - y * y + 1.0; }
-
-double f_im(double x, double y) { return 2.0 * x * y; }
-
-void newton_step(double *x, double *y) {
-  double tx = *x;
-  double ty = *y;
-
-  double dx = -1 / (4 * tx * tx + 4 * ty * ty) *
-			  (2 * tx * tx * tx + 2 * tx * ty * ty + 2 * tx);
-  double dy = -1 / (4 * tx * tx + 4 * ty * ty) *
-			  (2 * ty * ty * ty + 2 * tx * tx * ty - 2 * ty);
-
-  *x = tx + dx;
-  *y = ty + dy;
-}
-
-int main() {
-  double x = 1.0;
-  double y = 2.0;
-
-  int iterations = 0;
-
-  while (fabs(f_re(x, y)) > Epsilon || fabs(f_im(x, y)) > Epsilon) {
-	newton_step(&x, &y);
-	iterations++;
-  }
-
-  printf("x = %1.16f, y = %1.16f\n", x, y);
-  printf("iterations: %d\n", iterations);
-
-  return 0;
-}
-
-\end{lstlisting}
-
-\section{課題7}
-
-\ref{sec:ex-3}で用いた\ref{eq:ex-3}を割線法で解いてみる.
-初期値として$-5.0$を使用し,またこの際最初にニュートン法が計算した値は$-2.5523890241644089$である.
-これら２つの値から割線法で解を求めるC言語プログラムを\ref{code:ex-7}のように作成した.
-
-このプログラムの出力は以下の通りである.
-\begin{verbatim}
-> ./secant
-ans = -0.9460532773247446
-
-secant method
-0 -2.5523890241644089
-1 -1.7161278400922084
-2 -1.1555462337167537
-3 -0.9810892323798662
-4 -0.9479554431757200
-5 -0.9460715750647819
-6 -0.9460532869781404
-7 -0.9460532773247937
-iteration = 8
--0.9460532773247448 0.0000000000000001
-\end{verbatim}
-
-以上からわかるように,割線法では7ステップで解が収束した.なお,同じ条件でニュートン法で解くと6ステップで収束する.
-このため,割線法はニュートン法よりも収束が遅いことがわかる.実際,割線法は$(1 + \sqrt{5}) / 2 \simeq 1.6$次で収束することが知られており,
-ニュートン法の2次よりは遅く収束する.
-
-精度については,少なくとも今回の例ではニュートン法とほぼ同じくらいのものが出ているので,
-実用上問題はないだろう.しかし,今回はある程度解がわかっている状態で始めたが,そうでない場合は
-ある程度解に近いであろう値を2つ推測しないと使えないため可能であればニュートン法を用いたほうがよいだろう.
-
-
-
-\begin{lstlisting}[language={C}, caption={課題7で使用したソースコード}, label={code:ex-7}]
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#define Epsilon (1e-14)
-// 	f(x) = e^x + \sin(x) - 3x^2 + 2x + 5
-double f(double x) { return exp(x) + sin(x) - 3.0 * x * x + 2.0 * x + 5.0; }
-
-double secant_method(double (*f)(double), double initial_value1,
-					 double initial_value2, double epsilon) {
-  double x1 = initial_value1;
-  double x2 = initial_value2;
-
-  int i = 0;
-  while (fabs(f(x2)) > epsilon) {
-	fprintf(stderr, "%d %1.16f\n", i, x2);
-	double x3 = x2 - f(x2) * (x2 - x1) / (f(x2) - f(x1));
-	x1 = x2;
-	x2 = x3;
-	i++;
-  }
-
-  printf("iteration = %d\n", i);
-
-  return x2;
-}
-
-int main(void) {
-  double ans = -0.9460532773247446;
-  double initial_value_1 = -3.0;
-  double initial_value_2 = -1.5261471295549704;
-
-  printf("ans = %1.16f\n\n", ans);
-  printf("secant method\n");
-  double x = secant_method(f, initial_value_1, initial_value_2,
-						   Epsilon);  // find x ~= -0.94... from initial_value
-  printf("%1.16f %1.16f\n\n", x, fabs(x - ans));
-}
-
-\end{lstlisting}
 
 
 % \bibliography{hoge} %hoge.bibから拡張子を外した名前
