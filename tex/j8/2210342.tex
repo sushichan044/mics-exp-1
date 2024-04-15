@@ -145,14 +145,14 @@ void remove_edge(graph *g, int x, int y) {
   if (is_edge(g, x, y)) {
     int i;
     for (i = 0; i < g->degree[x]; i++) {
-  	// is_edge(g, x, y)が真であるので,g->degree[x][i] == yとなるiは必ず存在
-  	// よって必ずbreakするしこのfor-loopは安全
-  	if (g->edges[x][i] == y) {
-  	  break;
-  	}
+      // is_edge(g, x, y)が真であるので,g->degree[x][i] == yとなるiは必ず存在
+      // よって必ずbreakするしこのfor-loopは安全
+      if (g->edges[x][i] == y) {
+        break;
+      }
     }
     for (; i < g->degree[x] - 1; i++) {
-  	g->edges[x][i] = g->edges[x][i + 1];
+  	  g->edges[x][i] = g->edges[x][i + 1];
     }
     g->degree[x]--;
     g->nedges--;
@@ -172,10 +172,9 @@ void reorient_edge(graph *g, int x, int y) {
 }
 \end{lstlisting}
 
-また,配布されたテストプログラムを用いてこれらの関数を含む処理を実行した結果を
+また,配布されたテストプログラムを用いてこれらの関数を含む処理を実行した結果は以下のようになった.
 
 \begin{verbatim}
-\label{verb:ex-1-1}
 > ./kadai1main kadai1/input.txt
 0: 1 2
 1: 3 5
@@ -252,6 +251,171 @@ degree[6]: 2
 degree[7]: 0
 nedges = 11
 \end{verbatim}
+
+この操作では,$0-3$辺を追加したあと$0-1$辺を削除し,$0-2$辺を$2-0$辺に入れ替えている.
+その後の出力から,これらの操作が正しく完了していることがわかる.
+
+次に,異常系の入出力を試した結果は次のようになった.
+
+\begin{verbatim}
+> ./kadai1main kadai1/input.txt
+0: 1 2
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+***** insert an edge (input two numbers):
+0 1
+Warning: (0, 1) already exists, no insertion is performed
+0: 1 2
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+***** remove an edge (input two numbers):
+0 3
+Warning: (0, 3) does not exist
+0: 1 2
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+***** reorient an edge (input two numbers):
+0 3
+Warning: (0, 3) does not exist
+0: 1 2
+1: 3 5
+2: 3 4
+3: 4
+4: 5
+5: 7
+6: 4 5
+7:
+degree[0]: 2
+degree[1]: 2
+degree[2]: 2
+degree[3]: 1
+degree[4]: 1
+degree[5]: 1
+degree[6]: 2
+degree[7]: 0
+nedges = 11
+\end{verbatim}
+
+この操作で,既に存在する辺を挿入しようとする・存在しない辺を削除しようとする・存在しない辺を入れ替えようとする場合にエラーが出力され,
+何も操作が行われないことが確認できた.
+
+これら2つの検証によって,remove\_edge関数及びreorient\_edge関数が正しく実装されていることが確認できた.
+
+\section{課題2}
+
+実験資料を参考に,\ref{code:ex-2}のようにdfs関数を実装した.
+
+\begin{lstlisting}[language={C}, caption={実装したdfs関数のソースコード}, label={code:ex-2}]
+// 資料P.16
+void dfs(graph *g, dfs_info *d_i, int start) {
+  // startを訪問済みとする
+  d_i->visited[start] = 1;
+  for (int i = 0; i < g->degree[start]; i++) {
+    // まだ訪問していない頂点のみを対象とする
+    if (d_i->visited[g->edges[start][i]] == 0) {
+      // 再帰的にDFSを行う
+      d_i->predecessor[g->edges[start][i]] = start;
+      dfs(g, d_i, g->edges[start][i]);
+    }
+  }
+  return;
+}
+\end{lstlisting}
+
+また,配布された入力例graph2\_input.txtを用いて,dfs関数をテストした結果は次のようになった.
+
+\begin{verbatim}
+> ./kadai2main kadai2/graph2_input.txt
+0: predecessor[0] = -1
+1: predecessor[1] = 19
+2: predecessor[2] = 0
+3: predecessor[3] = 4
+4: predecessor[4] = 0
+5: predecessor[5] = 11
+6: predecessor[6] = 10
+7: predecessor[7] = 15
+8: predecessor[8] = 3
+9: predecessor[9] = 3
+10: predecessor[10] = 18
+11: predecessor[11] = 12
+12: predecessor[12] = 3
+13: predecessor[13] = 2
+14: predecessor[14] = 13
+15: predecessor[15] = 10
+16: predecessor[16] = 11
+17: predecessor[17] = -1
+18: predecessor[18] = 12
+19: predecessor[19] = 5
+0: visited[0] = 1
+1: visited[1] = 1
+2: visited[2] = 1
+3: visited[3] = 1
+4: visited[4] = 1
+5: visited[5] = 1
+6: visited[6] = 1
+7: visited[7] = 1
+8: visited[8] = 1
+9: visited[9] = 1
+10: visited[10] = 1
+11: visited[11] = 1
+12: visited[12] = 1
+13: visited[13] = 1
+14: visited[14] = 1
+15: visited[15] = 1
+16: visited[16] = 1
+17: visited[17] = 0
+18: visited[18] = 1
+19: visited[19] = 1
+\end{verbatim}
+
+このうちvisitedを出力している部分のみをテキストファイルに挿入し,graph2\_output.txtとの間に
+相違ないことをdiffコマンドで確認した.
+
+同様に他のすべての入力例でも出力例との間に相違ないことを確認できたので,このdfs関数の実装に問題はないと判断した.
+
+\section{課題3}
 
 
 % \bibliography{hoge} %hoge.bibから拡張子を外した名前
