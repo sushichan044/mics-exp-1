@@ -23,13 +23,12 @@ void initialize_search(graph *g, dfs_info *d_i) {
   return;
 }
 
-// 資料P.16のアルゴリズムを愚直に実装するだけ〜
+// 資料P.16
 void dfs(graph *g, dfs_info *d_i, int start) {
   // startを訪問済みとする
   d_i->visited[start] = 1;
   for (int i = 0; i < g->degree[start]; i++) {
-    // 訪問済みじゃないやつに対して...
-    // 訪問済みをたどってしまうと往復してしまうよねー
+    // まだ訪問していない頂点のみを対象とする
     if (d_i->visited[g->edges[start][i]] == 0) {
       // 再帰的にDFSを行う
       d_i->predecessor[g->edges[start][i]] = start;
