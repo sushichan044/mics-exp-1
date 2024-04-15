@@ -7,38 +7,38 @@
 /* maximum-matching algorithm */
 /* ************************** */
 
-void construct_digraph_for_matching(graph *g)
-{
-	int i, source, sink;
-	source = g->nvertices; insert_vertex(g);
-	sink   = g->nvertices; insert_vertex(g);
-	for(i = 0; i < g->nvertices -2; i++) {
-		if(g->degree[i]==0) insert_edge(g, i, sink);
-		else                insert_edge(g, source, i);
-	}
-	return;
+void construct_digraph_for_matching(graph *g) {
+  int i, source, sink;
+  source = g->nvertices;
+  insert_vertex(g);
+  sink = g->nvertices;
+  insert_vertex(g);
+  for (i = 0; i < g->nvertices - 2; i++) {
+    if (g->degree[i] == 0)
+      insert_edge(g, i, sink);
+    else
+      insert_edge(g, source, i);
+  }
+  return;
 }
 
-
-void augment(graph *g, dfs_info *d_i, graph *matching, int start, int end)
-{
-	/** ‚±‚±‚ðŠeŽ©‚ªŽÀ‘•‚·‚é **/
-	return;
+void augment(graph *g, dfs_info *d_i, graph *matching, int start, int end) {
+  /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
+  return;
 }
 
-int find_maximum_matching(graph *g, graph *matching)
-{
-	int size = 0;			/* the size of a current matching */
-	int source, sink;
-	dfs_info *d_i;
-	
-	source = g->nvertices -2;
-	sink   = g->nvertices -1;
-	d_i = (dfs_info*)malloc(sizeof(dfs_info));
+int find_maximum_matching(graph *g, graph *matching) {
+  int size = 0; /* the size of a current matching */
+  int source, sink;
+  dfs_info *d_i;
 
-  /** ‚±‚±‚ðŠeŽ©‚ªŽÀ‘•‚·‚é **/
+  source = g->nvertices - 2;
+  sink = g->nvertices - 1;
+  d_i = (dfs_info *)malloc(sizeof(dfs_info));
 
-	return size;
+  /** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ **/
+
+  return size;
 }
 
 #endif
