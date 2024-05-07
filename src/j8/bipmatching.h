@@ -23,7 +23,21 @@ void construct_digraph_for_matching(graph *g) {
 }
 
 void augment(graph *g, dfs_info *d_i, graph *matching, int start, int end) {
-  /** �������e������������ **/
+  int v = end;
+  int p = d_i->predecessor[v];
+
+  // 増加パスの逆方向にたどる
+  while (v != start) {
+    v = p;
+    p = d_i->predecessor[v];
+
+    if (!is_edge(matching, p, v) && !is_edge(matching, v, p)) {
+      insert_edge(matching, p, v);
+    } else {
+      // v, pを削除
+      remove_edge(matching, v, p);
+    }
+  }
   return;
 }
 
@@ -36,8 +50,17 @@ int find_maximum_matching(graph *g, graph *matching) {
   sink = g->nvertices - 1;
   d_i = (dfs_info *)malloc(sizeof(dfs_info));
 
-  /** �������e������������ **/
+  initialize_search(g, d_i);
+  dfs(g, d_i, source);
 
+  for (int i = 0; i < g->degree[source]; i++) {
+    if (d_i->visited[sink] == 1) {
+      augment(g, d_i, matching, source, sink);
+      size++;
+    }
+  }
+
+  free(d_i);  // メモリ解放
   return size;
 }
 
