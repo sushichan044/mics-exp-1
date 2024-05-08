@@ -33,6 +33,8 @@ faker==19.13.0
     # via pandasai
 fonttools==4.51.0
     # via matplotlib
+greenlet==3.0.3
+    # via sqlalchemy
 h11==0.14.0
     # via httpcore
 httpcore==1.0.5

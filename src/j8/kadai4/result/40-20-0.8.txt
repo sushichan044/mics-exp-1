@@ -1,0 +1,20 @@
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+Warning: (60, -1) does not exist
+./a.out kadai4/40-20-0.8.txt  0.00s user 0.00s system 62% cpu 0.002 total

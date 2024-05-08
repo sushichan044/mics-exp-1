@@ -51,8 +51,8 @@
 \usepackage[hyphens]{url} % urlをきれいに表示する
 \usepackage{ulem} % 下線を強化
 \usepackage[at]{easylist} % @をつかって箇条書き
-\usepackage{minted}
-\usepackage{termsim} % ターミナルを再現...誰得？
+% \usepackage{minted}
+% \usepackage{termsim} % ターミナルを再現...誰得？
 
 % ハイパーリンクを生成
 % sectionなどで数式を使う場合は \texorpdfstring{texstring}{pdfstring}をする
@@ -531,21 +531,30 @@ Warningが発生していた.今回原因を突き止めることはできなか
 		40        & 20        & 0.8    & 330          & 0.002   \\
 		40        & 40        & 0.4    & 290          & 0.002   \\
 		160       & 20        & 0.4    & 1261         & 0.002   \\
+		160       & 40        & 0.4    & 2615         & 0.002   \\
+		160       & 60        & 0.4    & 3857         & 0.003   \\
 		160       & 160       & 0.4    & 10231        & 0.010   \\
 		160       & 160       & 0.8    & 20470        & 0.022   \\
-		320       & 320       & 0.4    & 40839        & 0.059   \\ \bottomrule
+		320       & 320       & 0.4    & 40839        & 0.059   \\
+		320       & 320       & 0.8    & 81968        & 0.124   \\ \bottomrule
 	\end{tabular}
 \end{table}
 
 この結果から生成されたグラフの辺の数と実行CPU時間に正の相関があると考え,
-x軸を辺の数,y軸を実行CPU時間とした散布図を作成すると\ref{fig:scatter}のようになった.
+x軸を辺の数,y軸を実行CPU時間としたプロットを作成すると\ref{fig:scatter}のようになった.
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\textwidth]{scat-rand.png}
-	\caption{randgen.cのパラメータと実行結果の散布図}
+	\caption{randgen.cのパラメータと実行結果のプロット}
 	\label{fig:scatter}
 \end{figure}
+
+この図から,グラフの辺の数がある程度多くなると,CPU時間がほぼ線形に増加しているように見える.
+これは,増加道を見つけてそれらを反転させる操作を行う回数が,グラフの辺の数が増えていくほど増加するためであると考えられる.
+
+また,辺の数が少ない間はほとんどCPU時間に差が見られないので,グラフの辺の数がある程度小さい間はファイルの中身を読み取ったりグラフを構築したり
+する操作にかかる時間の影響が大きいと考えられる.d
 
 % \bibliography{hoge} %hoge.bibから拡張子を外した名前
 % \bibliographystyle{junsrt} %参考文献出力スタイル
