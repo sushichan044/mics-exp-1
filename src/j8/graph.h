@@ -97,8 +97,9 @@ void remove_edge(graph *g, int x, int y) {
     g->degree[x]--;
     g->nedges--;
     return;
+  } else {
+    fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
   }
-  fprintf(stderr, "Warning: (%d, %d) does not exist\n", x, y);
 }
 
 void reorient_edge(graph *g, int x, int y) {
