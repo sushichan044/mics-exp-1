@@ -417,6 +417,135 @@ void dfs(graph *g, dfs_info *d_i, int start) {
 
 \section{課題3}
 
+実験資料を参考に,\ref{code:ex-3}のようにdfs関数を実装した.
+
+\begin{lstlisting}[language={C}, caption={実装した関数のソースコード}, label={code:ex-3}]
+
+void augment(graph *g, dfs_info *d_i, graph *matching, int start, int end) {
+  int v = end;
+  int p = d_i->predecessor[v];
+
+  // 増加道の逆方向にたどる
+  while (v != start) {
+    reorient_edge(g, p, v);
+    v = p;
+    p = d_i->predecessor[v];
+
+    if ((!is_edge(matching, p, v)) && !is_edge(matching, v, p)) {
+      insert_edge(matching, p, v);
+    } else if (is_edge(matching, p, v)) {
+      remove_edge(matching, v, p);
+    }
+  }
+  return;
+}
+
+int find_maximum_matching(graph *g, graph *matching) {
+  int size = 0; /* the size of a current matching */
+  int source, sink;
+  dfs_info *d_i;
+
+  source = g->nvertices - 2;
+  sink = g->nvertices - 1;
+  d_i = (dfs_info *)malloc(sizeof(dfs_info));
+
+  initialize_search(g, d_i);
+  dfs(g, d_i, source);
+
+  while (d_i->visited[sink] == 1) {
+    augment(g, d_i, matching, source, sink);
+    size++;
+    initialize_search(g, d_i);
+    dfs(g, d_i, source);
+  }
+
+  free(d_i);  // メモリ解放
+  return size;
+}
+\end{lstlisting}
+
+また,配布された入力例の中からbigraph0\_input.txt,bigraph2\_input.txt,bigraph4\_input.txtを用いて,実装した関数をテストした結果はそれぞれ次のようになった.
+
+\begin{verbatim}
+> ./a.out kadai3/bigraph0_input.txt
+Warning: (10, -1) does not exist
+Warning: (10, -1) does not exist
+Warning: (10, -1) does not exist
+Warning: (10, -1) does not exist
+the maximum matching size = 5
+\end{verbatim}
+
+\begin{verbatim}
+> ./a.out kadai3/bigraph2_input.txt
+Warning: (15, -1) does not exist
+Warning: (15, -1) does not exist
+Warning: (15, -1) does not exist
+Warning: (15, -1) does not exist
+the maximum matching size = 5
+\end{verbatim}
+
+\begin{verbatim}
+> ./a.out kadai3/bigraph4_input.txt
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (20, 5) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+Warning: (25, 6) does not exist
+Warning: (40, -1) does not exist
+Warning: (28, 2) does not exist
+Warning: (40, -1) does not exist
+Warning: (29, 14) does not exist
+Warning: (40, -1) does not exist
+Warning: (40, -1) does not exist
+the maximum matching size = 18
+\end{verbatim}
+
+
+いずれも,期待される出力と最大マッチングのサイズが一致しているが,augment関数内のreorient\_edgeまたはremove\_edgeにおいて
+Warningが発生していた.今回原因を突き止めることはできなかったが,その分すべての入力例に対して追加でテストを行った.
+その結果最大マッチングのサイズは正しく出力されていたので,2つの関数の実装に大きな間違いはないと判断した.
+
+\section{課題4}
+まず,randgen.cに適当なパラメータを入力していくつかの入力を生成し,それを用いて実行時間についての傾向を調べた.
+このとき利用したパラメータとその実行結果は\ref{table:randgen-1}の通りである.
+
+
+\begin{table}[htbp]
+	\centering
+	\caption{randgen.cのパラメータと実行結果}
+	\label{table:randgen-1}
+	\begin{tabular}{@{}ccccc@{}}
+		\toprule
+		集合$X$の要素数 & 集合$Y$の要素数 & 辺の存在確率 & 生成されたグラフの辺の数 & 実行CPU時間 \\ \midrule
+		40        & 20        & 0.4    & 341          & 0.002   \\
+		40        & 20        & 0.8    & 330          & 0.002   \\
+		40        & 40        & 0.4    & 290          & 0.002   \\
+		160       & 20        & 0.4    & 1261         & 0.002   \\
+		160       & 160       & 0.4    & 10231        & 0.010   \\
+		160       & 160       & 0.8    & 20470        & 0.022   \\
+		320       & 320       & 0.4    & 40839        & 0.059   \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+この結果から生成されたグラフの辺の数と実行CPU時間に正の相関があると考え,
+x軸を辺の数,y軸を実行CPU時間とした散布図を作成すると\ref{fig:scatter}のようになった.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\textwidth]{scat-rand.png}
+	\caption{randgen.cのパラメータと実行結果の散布図}
+	\label{fig:scatter}
+\end{figure}
 
 % \bibliography{hoge} %hoge.bibから拡張子を外した名前
 % \bibliographystyle{junsrt} %参考文献出力スタイル
