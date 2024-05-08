@@ -26,15 +26,15 @@ void augment(graph *g, dfs_info *d_i, graph *matching, int start, int end) {
   int v = end;
   int p = d_i->predecessor[v];
 
-  // 増加パスの逆方向にたどる
+  // 増加道の逆方向にたどる
   while (v != start) {
+    reorient_edge(g, p, v);
     v = p;
     p = d_i->predecessor[v];
 
-    if (!is_edge(matching, p, v) && !is_edge(matching, v, p)) {
+    if ((!is_edge(matching, p, v)) && !is_edge(matching, v, p)) {
       insert_edge(matching, p, v);
-    } else {
-      // v, pを削除
+    } else if (is_edge(matching, p, v)) {
       remove_edge(matching, v, p);
     }
   }
@@ -53,11 +53,11 @@ int find_maximum_matching(graph *g, graph *matching) {
   initialize_search(g, d_i);
   dfs(g, d_i, source);
 
-  for (int i = 0; i < g->degree[source]; i++) {
-    if (d_i->visited[sink] == 1) {
-      augment(g, d_i, matching, source, sink);
-      size++;
-    }
+  while (d_i->visited[sink] == 1) {
+    augment(g, d_i, matching, source, sink);
+    size++;
+    initialize_search(g, d_i);
+    dfs(g, d_i, source);
   }
 
   free(d_i);  // メモリ解放
