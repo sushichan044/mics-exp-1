@@ -1,0 +1,2 @@
+[tools]
+java = "adoptopenjdk-jre-17.0.10+7"
