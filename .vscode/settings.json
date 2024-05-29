@@ -25,5 +25,13 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "~/.local/share/mise/installs/java/adoptopenjdk-17.0.10+7",
+      "default": true
+    }
+  ],
+  "java.jdt.ls.java.home": "~/.local/share/mise/installs/java/adoptopenjdk-17.0.10+7"
 }
