@@ -166,141 +166,140 @@ substは文字列に対して適用できなかった。
 
 # 問題6
 
-以下のような関数を定義した。
-second1やthird1のような操作を行う関数から呼び出されることを想定し、引数が空リストの場合の処理を行っている。
-
 ```lisp
-(defun first1 (list) (
-    if (null list) nil
-    (car list)
+(defun first1 (lst)
+    "Return the first element of a lst"
+    ; (first1 '(1 2 3)) => 1
+    ; (first1 '()) => nil
+     (if (null lst) nil ; if the lst is empty, return nil
+    (car lst)
 ))
-(defun rest1 (list) (
-    if (null list) nil
-    (cdr list)
-))
-(defun insert (elm list)
-    (if (null list) (cons elm nil)
-    (cons elm list)))
 
-(defun second1 (list) (first1 (rest1 list)))
-(defun third1 (list) (first1 (rest1 (rest1 list))))
+(defun rest1 (lst)
+    "Return the rest of the elements of a lst"
+    ; (rest1 '(1 2 3)) => (2 3)
+    ; (rest1 '()) => nil
+    (if (null lst) nil ; if the lst is empty, return nil
+    (cdr lst)
+))
+
+(defun insert (elm lst)
+    "Insert an element at the beginning of a lst"
+    ; (insert 1 '(2 3)) => (1 2 3)
+    ; (insert 1 '()) => (1)
+    (if (null lst) (list elm) ; if the lst is empty, return a lst with the element
+    (cons elm lst)))
+
+(defun second1 (lst)
+    "Return the second element of a lst"
+    ; (second1 '(1 2 3)) => 2
+    ; (second1 '()) => nil
+    (first1 (rest1 lst)))
+
+(defun third1 (lst)
+    "Return the third element of a lst"
+    ; (third1 '(1 2 3)) => 3
+    ; (third1 '()) => nil
+(first1 (rest1 (rest1 lst))))
+
 ```
 
 ---
 
 # 問題7
 
-以下のような関数を定義した。
-rest関数を使って先頭要素以外を取り出し、carで取り出した先頭要素をリストにして両者を結合することで実現した。
-
 ```lisp
 (defun rotate-1 (ary)
+    "Rotate the array by 1 element to the left"
+    ; (rotate-1 '(1 2 3 4)) => (2 3 4 1)
     (append (rest ary) (list(car ary))))
+
 ```
 
 ---
 
 # 問題8
 
-以下のような関数を定義した。
-引数で与えられたリストとその逆順リストを結合することで実現した。
-
 ```lisp
 (defun palindrome (ary)
+  "Make a palindrome with the given list"
+  ; (palindrome '(1 2 3)) => (1 2 3 3 2 1)
   (append ary (reverse ary)))
+
 ```
 
 ---
 
 # 問題9
 
-以下のような関数を定義した。
-回分の定義を考えると、引数で与えられたリストとその逆順リストが等しいかどうかを判定すればよい。
-
 ```lisp
 (defun palindromep (list)
+  "Return t if list is a palindrome, nil otherwise."
+  ; (palindromep '(a b c b a)) => t
+  ; (palindromep '(a b c c b a)) => t
+  ; (palindromep '(a b c d e)) => nil
   (equal list (reverse list)))
+
 ```
 
 ---
 
 # 問題10
 
-以下のような関数を定義した。
-
 ```lisp
 (defun check-temperture (temp)
+  "Check the temperature and return a symbol indicating the temperature range."
+  ; (check-temperture 100) => OK
+  ; (check-temperture 101) => RIDICULOUSLY-HOT
+  ; (check-temperture -1) => RIDICULOUSLY-COLD
+  ; (check-temperture 0) => OK
+  ; (check-temperture 50) => OK
   (cond ((> temp 100) 'RIDICULOUSLY-HOT)
         ((< temp 0) 'RIDICULOUSLY-COLD)
         (t 'OK)))
-```
 
-出力は以下のようであり、仕様を満たしている。
-
-```bash
-[1]> (check-temperture 100)
-OK
-[2]> (check-temperture 101)
-RIDICULOUSLY-HOT
-[3]> (check-temperture 0)
-OK
-[4]> (check-temperture -1)
-RIDICULOUSLY-COLD
-[5]> (check-temperture 50)
-OK
 ```
 
 ---
 
 # 問題11
 
-以下のような関数を定義した。
-配列の長さが1であればそのまま返し、そうでなければ先頭要素を最後尾に移動させ、残りの要素に対して再帰的に処理を行う。
-
-condを用いるより簡潔に書けると判断したためifを用いた。
-
 ```lisp
 (defun my-reverse (ary)
-  (if (equalp (length ary) 1)
-    ary
+  "Reverse the order of elements in a list."
+  ; (my-reverse '(1 2 3 4 5)) => (5 4 3 2 1)
+  ; (my-reverse '(1 (2 3) 4 5)) => (5 4 (2 3) 1)
+  (if (equalp (length ary) 1) ary ; if the list has only one element, return it
     (append (my-reverse (cdr ary)) (list (car ary)))
   ))
-```
 
-また、入れ子になっているリストをすべて逆順にする以下のような関数も定義した。
-
-```lisp
 (defun al-reverse (ary)
-  (if (equalp (length ary) 1)
-    ary
+  "Reverse the order of elements in a nested list."
+  (if (equalp (length ary) 1) ary
     (append (al-reverse (cdr ary)) (list (if (listp (car ary)) (al-reverse (car ary)) (car ary)))
+    ; move the first element to the end of the list
+    ; then recursively call al-reverse on the rest of the list
     )))
 ```
-
-my-reverseにおいて、先頭要素を末尾に移動させる際にそれがリストであれば、そのリストに対しても逆順にする処理を行うことで、入れ子になっているリストをすべて逆順にすることができる。
 
 ---
 
 # 問題12
 
-以下のような関数を定義した。
-
 ```lisp
 (defun max-1 (ary)
+    "Return the maximum element of a list of numbers."
+    ; (max-1 '(1 2 3 4 5)) => 5
+    ; (max-1 '(5 4 3 2 1)) => 5
     (cond ((null ary) nil)
           ((null (cdr ary)) (car ary))
           (t (max (car ary) (max-1 (cdr ary))))))
-```
 
-長さ0のリストが与えられた場合、nilを返し、長さ1のリストが与えられた場合その要素を返す。
-大きなリストについてはこれらを分割して再帰的に処理すればよい。
-
-
-また、入れ子になっているリストから最大値を取り出す以下のような関数も定義した。
-
-```lisp
 (defun al-max (ary)
-  (cond ((null ary) nil)
+    "Return the maximum element of a nested list of numbers."
+    ; (al-max '(1 2 3 4 5)) => 5
+    ; (al-max '(4 (5 3) 2 1)) => 5
+    (cond ((null ary) nil)
         ((atom ary) ary)
         ((equalp (length ary) 1) (
             if (listp (car ary))
@@ -309,98 +308,84 @@ my-reverseにおいて、先頭要素を末尾に移動させる際にそれが�
         (t (max (al-max (car ary)) (al-max (cdr ary))))))
 ```
 
-al-maxにおいて、長さ1リストの要素がリストであれば、そのリストに対しても再帰的に処理を行うことで、入れ子になっているリストから最大値を取り出すことができる。
-
 ---
 
 # 問題13
 
-以下のような関数を定義した。
-
 ```lisp
 (defun al-member (atm lst)
-    (cond ((null lst) nil)
-          ((atom lst) (if (eq atm lst) t nil))
+    "Return t if atm is a member of lst, nil otherwise."
+    ; (al-member 'a '(a b c)) => t
+    ; (al-member 'd '(a b c)) => nil
+    ; (al-member 'a '(b ((a) c) d)) => t
+    (cond ((null lst) nil) ; if lst is empty, return nil
+          ((atom lst) (if (eq atm lst) t nil)) ; if lst is an atom, return t if atm is equal to lst, nil otherwise
+          ; recursively check if atm is a member of the car or cdr of lst
             (t (or (al-member atm (car lst))
                      (al-member atm (cdr lst))))))
 ```
-
-リストの先頭要素がアトムであれば、その要素と比較し、一致すればtを返す。
-そうでなければ、先頭要素と残りのリストに対して再帰的に処理を行う。
 
 ---
 
 # 問題14
 
-以下のような関数を定義した。
-
 ```lisp
 (defun my-union (lst1 lst2)
+    "Return the union of two lists lst1 and lst2."
+    ; (my-union '(1 2 3) '(3 4 5)) => (1 2 3 4 5)
     (cond
-        ((null lst1) lst2)
-        ((member (car lst1) lst2) (my-union (cdr lst1) lst2))
-        (t (cons (car lst1) (my-union (cdr lst1) lst2)))
+        ((null lst1) lst2) ; If lst1 is empty, return lst2.
+        ((member (car lst1) lst2) (my-union (cdr lst1) lst2)) ; If the first element of lst1 is in lst2, skip it.
+        (t (cons (car lst1) (my-union (cdr lst1) lst2))) ; Otherwise, add it to the union.
     )
 )
 ```
-
-リスト1が空であればリスト2を返し、リスト1の先頭要素がリスト2に含まれていればリスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
 
 ---
 
 # 問題15
 
-以下のような関数を定義した。
-
 ```lisp
 (defun my-intersection (lst1 lst2)
+    "Return the intersection of two lists lst1 and lst2."
+    ; (my-intersection '(1 2 3) '(3 4 5)) => (3)
     (cond
-        ((null lst1) nil)
-        ((member (car lst1) lst2) (cons (car lst1) (my-intersection (cdr lst1) lst2)))
-        (t (my-intersection (cdr lst1) lst2))
+        ((null lst1) nil) ; If lst1 is empty, return nil.
+        ((member (car lst1) lst2) (cons (car lst1) (my-intersection (cdr lst1) lst2))) ; If the first element of lst1 is in lst2, add it to the intersection.
+        (t (my-intersection (cdr lst1) lst2)) ; Otherwise, skip first element of lst1.
     )
 )
 ```
-
-リスト1が空であればnilを返す。
-リスト1の先頭要素がリスト2に含まれていれば、それを結果のリストに追加し、リスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
-リスト1の先頭要素がリスト2に含まれていなければ、リスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
 
 ---
 
 # 問題16
 
-以下のような関数を定義した。
-
 ```lisp
 (defun intersectp (lst1 lst2)
-    (not (null (my-intersection lst1 lst2)))
+    "Return t if the intersection of two lists lst1 and lst2 is not empty. Otherwise, return nil."
+    ; (intersectp '(1 2 3) '(3 4 5)) => t
+    (not (null (my-intersection lst1 lst2))) ; If the intersection is not empty, return t.
 )
 ```
-
-リスト1とリスト2の共通部分が空でないかどうかを判定することで、リスト1とリスト2の共通部分があるかどうかを判定することができる。
 
 ---
 
 # 問題17
 
-以下のような関数を定義した。
-
 ```lisp
 (defun samesetp (lst1 lst2)
+    "Return t if two lists lst1 and lst2 are the same set. Otherwise, return nil. Not order-sensitive."
+    ; (samesetp '(1 2 3) '(3 2 1)) => t
+    ; (samesetp '(1 2 3) '(3 4 5)) => nil
     (cond
-        ((null lst1) (null lst2))
-        ((null lst2) nil)
-        ((not (equalp (length lst1) (length lst2))) nil)
-        ((member (car lst1) lst2) (samesetp (cdr lst1) (remove (car lst1) lst2)))
+        ((null lst1) (null lst2)) ; If both lists are empty, return t.
+        ((null lst2) nil) ; If lst2 is empty but lst1 is not, return nil.
+        ((not (equalp (length lst1) (length lst2))) nil) ; If the lengths of lst1 and lst2 are not equal, return nil.
+        ((member (car lst1) lst2) (samesetp (cdr lst1) (remove (car lst1) lst2))) ; If the first element of lst1 is in lst2, remove it from lst2 and check the rest of the lists.
         (t nil)
     )
 )
 ```
-
-リスト1が空であればリスト2も空でなければならないので、リスト2が空でない場合はnilを返す。
-リスト2が空であれば、この時点でリスト1は空でないことが確定しているのでnilを返す。
-リスト1とリスト2の長さが等しくなければnilを返す。
-その後、リスト1の先頭要素がリスト2に含まれていれば、それぞれのリストから該当要素を削除して再帰的に処理を行う。
 
 ---
