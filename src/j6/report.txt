@@ -249,3 +249,36 @@ RIDICULOUSLY-COLD
 [5]> (check-temperture 50)
 OK
 ```
+
+---
+
+# 問題11
+
+以下のような関数を定義した。
+配列の長さが1であればそのまま返し、そうでなければ先頭要素を最後尾に移動させ、残りの要素に対して再帰的に処理を行う。
+
+condを用いるより簡潔に書けると判断したためifを用いた。
+
+```lisp
+(defun my-reverse (ary)
+  (if (equalp (length ary) 1)
+    ary
+    (append (my-reverse (cdr ary)) (list (car ary)))
+  ))
+```
+
+また、入れ子になっているリストをすべて逆順にする以下のような関数も定義した。
+
+```lisp
+(defun al-reverse (ary)
+  (if (equalp (length ary) 1)
+    ary
+    (append (al-reverse (cdr ary)) (list (if (listp (car ary)) (al-reverse (car ary)) (car ary)))
+    )))
+```
+
+my-reverseにおいて、先頭要素を末尾に移動させる際にそれがリストであれば、そのリストに対しても逆順にする処理を行うことで、入れ子になっているリストをすべて逆順にすることができる。
+
+---
+
+# 問題12
