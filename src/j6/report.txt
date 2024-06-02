@@ -163,3 +163,25 @@ ABC
 substは文字列に対して適用できなかった。
 
 ---
+
+# 問題6
+
+以下のような関数を定義した。
+second1やthird1のような操作を行う関数から呼び出されることを想定し、引数が空リストの場合の処理を行っている。
+
+```lisp
+(defun first1 (list) (
+    if (null list) nil
+    (car list)
+))
+(defun rest1 (list) (
+    if (null list) nil
+    (cdr list)
+))
+(defun insert (elm list)
+    (if (null list) (cons elm nil)
+    (cons elm list)))
+
+(defun second1 (list) (first1 (rest1 list)))
+(defun third1 (list) (first1 (rest1 (rest1 list))))
+```
