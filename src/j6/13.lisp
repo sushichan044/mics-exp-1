@@ -1,0 +1,5 @@
+(defun al-member (atm lst)
+    (cond ((null lst) nil)
+          ((atom lst) (if (eq atm lst) t nil))
+            (t (or (al-member atm (car lst))
+                     (al-member atm (cdr lst))))))
