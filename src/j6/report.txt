@@ -329,3 +329,78 @@ al-maxにおいて、長さ1リストの要素がリストであれば、その�
 そうでなければ、先頭要素と残りのリストに対して再帰的に処理を行う。
 
 ---
+
+# 問題14
+
+以下のような関数を定義した。
+
+```lisp
+(defun my-union (lst1 lst2)
+    (cond
+        ((null lst1) lst2)
+        ((member (car lst1) lst2) (my-union (cdr lst1) lst2))
+        (t (cons (car lst1) (my-union (cdr lst1) lst2)))
+    )
+)
+```
+
+リスト1が空であればリスト2を返し、リスト1の先頭要素がリスト2に含まれていればリスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
+
+---
+
+# 問題15
+
+以下のような関数を定義した。
+
+```lisp
+(defun my-intersection (lst1 lst2)
+    (cond
+        ((null lst1) nil)
+        ((member (car lst1) lst2) (cons (car lst1) (my-intersection (cdr lst1) lst2)))
+        (t (my-intersection (cdr lst1) lst2))
+    )
+)
+```
+
+リスト1が空であればnilを返す。
+リスト1の先頭要素がリスト2に含まれていれば、それを結果のリストに追加し、リスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
+リスト1の先頭要素がリスト2に含まれていなければ、リスト1の先頭要素を除いたリスト1とリスト2に対して再帰的に処理を行う。
+
+---
+
+# 問題16
+
+以下のような関数を定義した。
+
+```lisp
+(defun intersectp (lst1 lst2)
+    (not (null (my-intersection lst1 lst2)))
+)
+```
+
+リスト1とリスト2の共通部分が空でないかどうかを判定することで、リスト1とリスト2の共通部分があるかどうかを判定することができる。
+
+---
+
+# 問題17
+
+以下のような関数を定義した。
+
+```lisp
+(defun samesetp (lst1 lst2)
+    (cond
+        ((null lst1) (null lst2))
+        ((null lst2) nil)
+        ((not (equalp (length lst1) (length lst2))) nil)
+        ((member (car lst1) lst2) (samesetp (cdr lst1) (remove (car lst1) lst2)))
+        (t nil)
+    )
+)
+```
+
+リスト1が空であればリスト2も空でなければならないので、リスト2が空でない場合はnilを返す。
+リスト2が空であれば、この時点でリスト1は空でないことが確定しているのでnilを返す。
+リスト1とリスト2の長さが等しくなければnilを返す。
+その後、リスト1の先頭要素がリスト2に含まれていれば、それぞれのリストから該当要素を削除して再帰的に処理を行う。
+
+---
