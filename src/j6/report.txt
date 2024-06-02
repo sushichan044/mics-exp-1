@@ -282,3 +282,31 @@ my-reverseにおいて、先頭要素を末尾に移動させる際にそれが�
 ---
 
 # 問題12
+
+以下のような関数を定義した。
+
+```lisp
+(defun max-1 (ary)
+    (cond ((null ary) nil)
+          ((null (cdr ary)) (car ary))
+          (t (max (car ary) (max-1 (cdr ary))))))
+```
+
+長さ0のリストが与えられた場合、nilを返し、長さ1のリストが与えられた場合その要素を返す。
+大きなリストについてはこれらを分割して再帰的に処理すればよい。
+
+
+また、入れ子になっているリストから最大値を取り出す以下のような関数も定義した。
+
+```lisp
+(defun al-max (ary)
+  (cond ((null ary) nil)
+        ((atom ary) ary)
+        ((equalp (length ary) 1) (
+            if (listp (car ary))
+                (al-max (car ary))
+                (car ary)))
+        (t (max (al-max (car ary)) (al-max (cdr ary))))))
+```
+
+al-maxにおいて、長さ1リストの要素がリストであれば、そのリストに対しても再帰的に処理を行うことで、入れ子になっているリストから最大値を取り出すことができる。
