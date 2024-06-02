@@ -1,0 +1,35 @@
+学籍番号: 2210342
+氏名: 鈴木謙太郎
+---
+
+# 問題1
+
+## 1.1
+式: (apple orange pear grapefruit)
+解答: (car(cdr(cdr '(apple orange pear grapefruit))))
+解答(合成): (caddr '(apple orange pear grapefruit))
+
+## 1.2
+式: ((apple orange) (pear grapefruit))
+解答: (car(car(cdr '((apple orange) (pear grapefruit)))))
+解答(合成): (caadr '((apple orange) (pear grapefruit)))
+
+## 1.3
+式: (((apple) (orange) (pear) (grapefruit)))
+解答: (car(car(cdr(cdr(car '(((apple) (orange) (pear) (grapefruit))))))))
+解答(合成): (car (caddar '(((apple) (orange) (pear) (grapefruit))))) ;PEARだけを含むリストを取り出すまでと、そこからPEARを取り出すまでを分けている
+
+## 1.4
+式: (apple (orange) ((pear)) (((grapefruit))))
+解答: (car(car(car(cdr(cdr(car '((apple (orange) ((pear)) (((grapefruit)))))))))))
+解答(合成): (caar (caddar '((apple (orange) ((pear)) (((grapefruit))))))) ;PEARだけを含むリストを取り出すまでと、そこからPEARを取り出すまでを分けている
+
+## 1.5
+式: ((((apple))) ((orange)) (pear) grapefruit)
+解答: (car(car(cdr(cdr '((((apple))) ((orange)) (pear) grapefruit)))))
+解答(合成): (car (caddr '((((apple))) ((orange)) (pear) grapefruit))) ;PEARだけを含むリストを取り出すまでと、そこからPEARを取り出すまでを分けている
+
+## 1.6
+式: ((((apple) orange) pear) grapefruit)
+解答: (car(cdr(car '((((apple) orange) pear) grapefruit))))
+解答(合成): (cadar '((((apple) orange) pear) grapefruit))
