@@ -88,9 +88,35 @@ lengthは引数に与えられたリストの直下の子要素を数える。
 1
 ```
 
-3行目のようなリストから3の出力を得たければ、次のようになるだろう。
+3行目で与えられたリストから3の出力を得たければ、次のようになるだろう。
 
 ```bash
 [4]> (length (car '((plato socrates aristotle))))
 3
+```
+
+# 問題4
+
+問題3と同様の構造のデータである。
+reverseは引数に与えられたリストの直下の子要素を逆順に並べたリストを返す。
+
+(plato socrates aristotle)は3つの要素を持つリストであるため、(aristotle socrates plato)が返される。
+((plato) (socrates) (aristotle))は3つのリストを要素とするリストであるため、(aristotle socrates plato)が返される。
+((plato socrates aristotle))は3つの要素を持つ1つのリストを要素とするリストであるため、((plato socrates aristotle))が返される。
+
+
+```bash
+[1]> (reverse '(plato socrates aristotle))
+(ARISTOTLE SOCRATES PLATO)
+[2]> (reverse '((plato) (socrates) (aristotle)))
+((ARISTOTLE) (SOCRATES) (PLATO))
+[3]> (reverse '((plato socrates aristotle)))
+((PLATO SOCRATES ARISTOTLE))
+```
+
+3行目で与えられたリストから((ARISTOTLE SOCRATES PLATO))の出力を得たければ、次のようになるだろう。
+
+```bash
+[4]> (list (reverse (car '((plato socrates aristotle)))))
+((ARISTOTLE SOCRATES PLATO))
 ```
