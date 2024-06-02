@@ -34,6 +34,8 @@
 解答: (car(cdr(car '((((apple) orange) pear) grapefruit))))
 解答(合成): (cadar '((((apple) orange) pear) grapefruit))
 
+---
+
 # 問題2
 
 1行目でtoolsに['hammer', 'screwdriver']を代入している。
@@ -71,6 +73,8 @@ tools
 (SAW WRENCH PLIERS HAMMER SCREWDRIVER)
 ```
 
+---
+
 # 問題3
 
 lengthは引数に与えられたリストの直下の子要素を数える。
@@ -94,6 +98,8 @@ lengthは引数に与えられたリストの直下の子要素を数える。
 [4]> (length (car '((plato socrates aristotle))))
 3
 ```
+
+---
 
 # 問題4
 
@@ -120,3 +126,7 @@ reverseは引数に与えられたリストの直下の子要素を逆順に並�
 [4]> (list (reverse (car '((plato socrates aristotle)))))
 ((ARISTOTLE SOCRATES PLATO))
 ```
+
+---
+
+# 問題5
