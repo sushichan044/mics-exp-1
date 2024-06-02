@@ -34,7 +34,7 @@
 解答: (car(cdr(car '((((apple) orange) pear) grapefruit))))
 解答(合成): (cadar '((((apple) orange) pear) grapefruit))
 
-# 問題2.
+# 問題2
 
 1行目でtoolsに['hammer', 'screwdriver']を代入している。
 2行目でtoolsの先頭に'pliers'を追加しているが、consは非破壊的な操作であるため、3行目で出力させたtoolsの値は変わらない。
@@ -69,4 +69,28 @@ tools
 (SAW WRENCH PLIERS HAMMER SCREWDRIVER)
 [9]>
 (SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+```
+
+# 問題3
+
+lengthは引数に与えられたリストの直下の子要素を数える。
+そのため、(plato socrates aristotle)は3つの要素を持つリストであるため、3が返される。
+((plato) (socrates) (aristotle))は3つのリストを要素とするリストであるため、3が返される。
+((plato socrates aristotle))は3つの要素を持つ1つのリストを要素とするリストであるため、1が返される。
+
+
+```bash
+[1]> (length '(plato socrates aristotle))
+3
+[2]> (length '((plato) (socrates) (aristotle)))
+3
+[3]> (length '((plato socrates aristotle)))
+1
+```
+
+3行目のようなリストから3の出力を得たければ、次のようになるだろう。
+
+```bash
+[4]> (length (car '((plato socrates aristotle))))
+3
 ```
