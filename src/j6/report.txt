@@ -44,7 +44,7 @@
 
 6行目以降のappendにおいても同様であり、これは非破壊的な操作であるため明示的にtoolsに結果を再代入しないとtoolsの値は変わらない。
 
-```bash
+```clisp
 [1]> (set 'tools (list 'hammer 'screwdriver))
 (cons 'pliers tools)
 tools
@@ -83,7 +83,7 @@ lengthは引数に与えられたリストの直下の子要素を数える。
 ((plato socrates aristotle))は3つの要素を持つ1つのリストを要素とするリストであるため、1が返される。
 
 
-```bash
+```clisp
 [1]> (length '(plato socrates aristotle))
 3
 [2]> (length '((plato) (socrates) (aristotle)))
@@ -94,7 +94,7 @@ lengthは引数に与えられたリストの直下の子要素を数える。
 
 3行目で与えられたリストから3の出力を得たければ、次のようになるだろう。
 
-```bash
+```clisp
 [4]> (length (car '((plato socrates aristotle))))
 3
 ```
@@ -111,7 +111,7 @@ reverseは引数に与えられたリストの直下の子要素を逆順に並�
 ((plato socrates aristotle))は3つの要素を持つ1つのリストを要素とするリストであるため、((plato socrates aristotle))が返される。
 
 
-```bash
+```clisp
 [1]> (reverse '(plato socrates aristotle))
 (ARISTOTLE SOCRATES PLATO)
 [2]> (reverse '((plato) (socrates) (aristotle)))
@@ -122,7 +122,7 @@ reverseは引数に与えられたリストの直下の子要素を逆順に並�
 
 3行目で与えられたリストから((ARISTOTLE SOCRATES PLATO))の出力を得たければ、次のようになるだろう。
 
-```bash
+```clisp
 [4]> (list (reverse (car '((plato socrates aristotle)))))
 ((ARISTOTLE SOCRATES PLATO))
 ```
@@ -130,3 +130,36 @@ reverseは引数に与えられたリストの直下の子要素を逆順に並�
 ---
 
 # 問題5
+
+appendは2つのリストを結合するので、appendに要素数2のリスト, 要素数2のリストを与えると、要素数4のリストが返される。
+
+substはリストの中から指定された要素を探し、指定された要素に置き換える。
+
+
+```clisp
+[1]> (length '((car chevrolet) (drink coke) (cereal wheaties)))
+3
+[2]> (reverse '((car chevrolet) (drink coke) (cereal wheaties)))
+((CEREAL WHEATIES) (DRINK COKE) (CAR CHEVROLET))
+[3]> (append '((car chevrolet) (drink coke)) (reverse '((car chevrolet) (drink coke))))
+((CAR CHEVROLET) (DRINK COKE) (DRINK COKE) (CAR CHEVROLET))
+[4]> (subst 'out 'in '(the ball is in))
+(THE BALL IS OUT)
+[5]> (subst 'in 'out '(the ball is in))
+(THE BALL IS IN)
+[6]> (last '(the ball is in))
+(IN)
+```
+
+ところで、プログラミング言語によっては文字列を文字のリストとして扱っている場合がある。
+その場合文字列にsubstを適用すると、文字列の中から指定された文字を探し、指定された文字に置き換えることになる。
+実際に動くのか試した。
+
+```bash
+[7]> (subst 'a 'b 'abc)
+ABC
+```
+
+substは文字列に対して適用できなかった。
+
+---
