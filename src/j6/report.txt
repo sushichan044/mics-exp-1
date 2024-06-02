@@ -221,3 +221,31 @@ rest関数を使って先頭要素以外を取り出し、carで取り出した�
 (defun palindromep (list)
   (equal list (reverse list)))
 ```
+
+---
+
+# 問題10
+
+以下のような関数を定義した。
+
+```lisp
+(defun check-temperture (temp)
+  (cond ((> temp 100) 'RIDICULOUSLY-HOT)
+        ((< temp 0) 'RIDICULOUSLY-COLD)
+        (t 'OK)))
+```
+
+出力は以下のようであり、仕様を満たしている。
+
+```bash
+[1]> (check-temperture 100)
+OK
+[2]> (check-temperture 101)
+RIDICULOUSLY-HOT
+[3]> (check-temperture 0)
+OK
+[4]> (check-temperture -1)
+RIDICULOUSLY-COLD
+[5]> (check-temperture 50)
+OK
+```
