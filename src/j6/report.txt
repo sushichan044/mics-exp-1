@@ -33,3 +33,40 @@
 式: ((((apple) orange) pear) grapefruit)
 解答: (car(cdr(car '((((apple) orange) pear) grapefruit))))
 解答(合成): (cadar '((((apple) orange) pear) grapefruit))
+
+# 問題2.
+
+1行目でtoolsに['hammer', 'screwdriver']を代入している。
+2行目でtoolsの先頭に'pliers'を追加しているが、consは非破壊的な操作であるため、3行目で出力させたtoolsの値は変わらない。
+4行目では2行目と同じconsの結果をtoolsに再代入しているので、5行目では変更後のtoolsの値が出力される。
+
+6行目以降のappendにおいても同様であり、これは非破壊的な操作であるため明示的にtoolsに結果を再代入しないとtoolsの値は変わらない。
+
+```bash
+[1]> (set 'tools (list 'hammer 'screwdriver))
+(cons 'pliers tools)
+tools
+(set 'tools (cons 'pliers tools))
+tools
+(append '(saw wrench) tools)
+tools
+(set 'tools (append '(saw wrench) tools))
+tools
+(HAMMER SCREWDRIVER)
+[2]>
+(PLIERS HAMMER SCREWDRIVER)
+[3]>
+(HAMMER SCREWDRIVER)
+[4]>
+(PLIERS HAMMER SCREWDRIVER)
+[5]>
+(PLIERS HAMMER SCREWDRIVER)
+[6]>
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+[7]>
+(PLIERS HAMMER SCREWDRIVER)
+[8]>
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+[9]>
+(SAW WRENCH PLIERS HAMMER SCREWDRIVER)
+```
