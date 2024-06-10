@@ -6,16 +6,17 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
-annotated-types==0.6.0
+annotated-types==0.7.0
     # via pydantic
-anyio==4.3.0
+anyio==4.4.0
     # via httpx
     # via openai
 astor==0.8.1
     # via pandasai
-certifi==2024.2.2
+certifi==2024.6.2
     # via httpcore
     # via httpx
     # via requests
@@ -27,14 +28,12 @@ cycler==0.12.1
     # via matplotlib
 distro==1.9.0
     # via openai
-duckdb==0.10.2
+duckdb==0.10.3
     # via pandasai
 faker==19.13.0
     # via pandasai
-fonttools==4.51.0
+fonttools==4.53.0
     # via matplotlib
-greenlet==3.0.3
-    # via sqlalchemy
 h11==0.14.0
     # via httpcore
 httpcore==1.0.5
@@ -51,7 +50,7 @@ kiwisolver==1.4.5
     # via matplotlib
 markupsafe==2.1.5
     # via jinja2
-matplotlib==3.8.4
+matplotlib==3.9.0
     # via pandasai
 mpmath==1.3.0
     # via sympy
@@ -61,21 +60,21 @@ numpy==1.26.4
     # via mics-exp-1
     # via pandas
     # via scipy
-openai==1.26.0
+openai==1.33.0
     # via pandasai
-packaging==24.0
+packaging==24.1
     # via matplotlib
 pandas==1.5.3
     # via pandasai
-pandasai==2.0.37
+pandasai==2.1.1
     # via mics-exp-1
 pillow==10.3.0
     # via matplotlib
     # via pandasai
-pydantic==2.7.1
+pydantic==2.7.3
     # via openai
     # via pandasai
-pydantic-core==2.18.2
+pydantic-core==2.18.4
     # via pydantic
 pygments==2.18.0
     # via mics-exp-1
@@ -89,9 +88,9 @@ python-dotenv==1.0.1
     # via pandasai
 pytz==2024.1
     # via pandas
-requests==2.31.0
+requests==2.32.3
     # via pandasai
-scipy==1.13.0
+scipy==1.13.1
     # via pandasai
 six==1.16.0
     # via python-dateutil
@@ -101,11 +100,11 @@ sniffio==1.3.1
     # via openai
 sqlalchemy==2.0.30
     # via pandasai
-sympy==1.12
+sympy==1.12.1
     # via mics-exp-1
 tqdm==4.66.4
     # via openai
-typing-extensions==4.11.0
+typing-extensions==4.12.2
     # via openai
     # via pydantic
     # via pydantic-core

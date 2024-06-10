@@ -6,18 +6,21 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 -e file:.
-annotated-types==0.6.0
+annotated-types==0.7.0
     # via pydantic
-anyio==4.3.0
+anyio==4.4.0
     # via httpx
     # via openai
+appnope==0.1.4
+    # via ipykernel
 astor==0.8.1
     # via pandasai
 asttokens==2.4.1
     # via stack-data
-certifi==2024.2.2
+certifi==2024.6.2
     # via httpcore
     # via httpx
     # via requests
@@ -35,16 +38,14 @@ decorator==5.1.1
     # via ipython
 distro==1.9.0
     # via openai
-duckdb==0.10.2
+duckdb==0.10.3
     # via pandasai
 executing==2.0.1
     # via stack-data
 faker==19.13.0
     # via pandasai
-fonttools==4.51.0
+fonttools==4.53.0
     # via matplotlib
-greenlet==3.0.3
-    # via sqlalchemy
 h11==0.14.0
     # via httpcore
 httpcore==1.0.5
@@ -56,14 +57,14 @@ idna==3.7
     # via httpx
     # via requests
 ipykernel==6.29.4
-ipython==8.24.0
+ipython==8.25.0
     # via ipykernel
 japanize-matplotlib==1.1.3
 jedi==0.19.1
     # via ipython
 jinja2==3.1.4
     # via pandasai
-jupyter-client==8.6.1
+jupyter-client==8.6.2
     # via ipykernel
 jupyter-core==5.7.2
     # via ipykernel
@@ -72,7 +73,7 @@ kiwisolver==1.4.5
     # via matplotlib
 markupsafe==2.1.5
     # via jinja2
-matplotlib==3.8.4
+matplotlib==3.9.0
     # via japanize-matplotlib
     # via pandasai
 matplotlib-inline==0.1.7
@@ -91,14 +92,14 @@ numpy==1.26.4
     # via mics-exp-1
     # via pandas
     # via scipy
-openai==1.26.0
+openai==1.33.0
     # via pandasai
-packaging==24.0
+packaging==24.1
     # via ipykernel
     # via matplotlib
 pandas==1.5.3
     # via pandasai
-pandasai==2.0.37
+pandasai==2.1.1
     # via mics-exp-1
 parso==0.8.4
     # via jedi
@@ -107,9 +108,9 @@ pexpect==4.9.0
 pillow==10.3.0
     # via matplotlib
     # via pandasai
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via jupyter-core
-prompt-toolkit==3.0.43
+prompt-toolkit==3.0.46
     # via ipython
 psutil==5.9.8
     # via ipykernel
@@ -117,10 +118,10 @@ ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
     # via stack-data
-pydantic==2.7.1
+pydantic==2.7.3
     # via openai
     # via pandasai
-pydantic-core==2.18.2
+pydantic-core==2.18.4
     # via pydantic
 pygments==2.18.0
     # via ipython
@@ -139,9 +140,9 @@ pytz==2024.1
 pyzmq==26.0.3
     # via ipykernel
     # via jupyter-client
-requests==2.31.0
+requests==2.32.3
     # via pandasai
-scipy==1.13.0
+scipy==1.13.1
     # via pandasai
 six==1.16.0
     # via asttokens
@@ -154,9 +155,9 @@ sqlalchemy==2.0.30
     # via pandasai
 stack-data==0.6.3
     # via ipython
-sympy==1.12
+sympy==1.12.1
     # via mics-exp-1
-tornado==6.4
+tornado==6.4.1
     # via ipykernel
     # via jupyter-client
 tqdm==4.66.4
@@ -168,7 +169,7 @@ traitlets==5.14.3
     # via jupyter-client
     # via jupyter-core
     # via matplotlib-inline
-typing-extensions==4.11.0
+typing-extensions==4.12.2
     # via ipython
     # via mypy
     # via openai
