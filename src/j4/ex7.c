@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/fcntl.h>
+#include <unistd.h>
 
 int main(int argc, char const *argv[]) {
   if (argc < 2) {
@@ -17,19 +19,17 @@ int main(int argc, char const *argv[]) {
   }
 
   char const *command = argv[1];
-  int args_length = argc - 3;
+  int args_length = argc - 2;
   char const *args[args_length + 1];
   for (int i = 0; i < args_length; i++) {
-    args[i] = argv[i + 2];
+    args[i] = argv[i + 1];
   }
   args[args_length] = NULL;
 
-  printf("command: %s\n", command);
-  printf("args: ");
-  for (int i = 0; i < args_length; i++) {
-    printf("%s ", args[i]);
-  }
-  printf("\n");
-  printf("destination: %s\n", destination);
+  close(1);
+  dup(fd);
+  close(fd);
+
+  execvp(command, args);
   return 0;
 }
