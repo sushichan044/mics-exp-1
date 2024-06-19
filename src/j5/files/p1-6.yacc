@@ -1,5 +1,4 @@
 %token NUM;
-%token NEWLINE
 %%
 expr : NUM              { printf("NUM: %s\n", yytext); }
      | expr '*' NUM     { printf("MUL: %s\n", yytext); }
