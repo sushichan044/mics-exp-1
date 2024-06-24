@@ -1,5 +1,5 @@
 %token NUM;
 %%
 expr : NUM              { value = atoi(yytext); }
-     | NUM '+' expr     { value = value + atoi(yytext); }
+     | expr '+' NUM     { value = value + atoi(yytext); }
      ;
