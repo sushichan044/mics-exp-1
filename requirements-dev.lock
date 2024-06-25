@@ -14,6 +14,8 @@ annotated-types==0.7.0
 anyio==4.4.0
     # via httpx
     # via openai
+appnope==0.1.4
+    # via ipykernel
 astor==0.8.1
     # via pandasai
 asttokens==2.4.1
@@ -44,8 +46,6 @@ faker==19.13.0
     # via pandasai
 fonttools==4.53.0
     # via matplotlib
-greenlet==3.0.3
-    # via sqlalchemy
 h11==0.14.0
     # via httpcore
 httpcore==1.0.5
