@@ -141,7 +141,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 1 "p3-1.yacc"
+#line 1 "p3-.yacc"
 
   Node* np;
   int i;
@@ -1179,145 +1179,145 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* prog: IDENT '{' stlist '}'  */
-#line 23 "p3-1.yacc"
-                                    { emit_c((yyvsp[-1].np)); return 0; }
+#line 23 "p3-.yacc"
+                                    { emit_asm((yyvsp[-1].np)); return 0; }
 #line 1185 "y.tab.c"
     break;
 
   case 3: /* stlist: %empty  */
-#line 25 "p3-1.yacc"
+#line 25 "p3-.yacc"
                                     { (yyval.np) = NULL; }
 #line 1191 "y.tab.c"
     break;
 
   case 4: /* stlist: stlist stat  */
-#line 26 "p3-1.yacc"
+#line 26 "p3-.yacc"
                                     { (yyval.np) = createNode(T_STLIST, (yyvsp[-1].np), (yyvsp[0].np)); }
 #line 1197 "y.tab.c"
     break;
 
   case 5: /* stat: var '=' expr ';'  */
-#line 28 "p3-1.yacc"
+#line 28 "p3-.yacc"
                                     { (yyval.np) = createNode(T_ASSIGN, (yyvsp[-3].np), (yyvsp[-1].np)); }
 #line 1203 "y.tab.c"
     break;
 
   case 6: /* stat: READ var ';'  */
-#line 29 "p3-1.yacc"
+#line 29 "p3-.yacc"
                                     { (yyval.np) = createNode(T_READ, (yyvsp[-1].np), NULL); }
 #line 1209 "y.tab.c"
     break;
 
   case 7: /* stat: PRINT expr ';'  */
-#line 30 "p3-1.yacc"
+#line 30 "p3-.yacc"
                                     { (yyval.np) = createNode(T_PRINT, (yyvsp[-1].np), NULL); }
 #line 1215 "y.tab.c"
     break;
 
   case 8: /* stat: WHILE '(' cond ')' stat  */
-#line 31 "p3-1.yacc"
+#line 31 "p3-.yacc"
                                     { (yyval.np) = createNode(T_WHILE, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1221 "y.tab.c"
     break;
 
   case 9: /* stat: '{' stlist '}'  */
-#line 32 "p3-1.yacc"
+#line 32 "p3-.yacc"
                                     { (yyval.np) = createNode(T_BLOCK, (yyvsp[-1].np), NULL); }
 #line 1227 "y.tab.c"
     break;
 
   case 10: /* expr: prim  */
-#line 34 "p3-1.yacc"
+#line 34 "p3-.yacc"
                                     { (yyval.np) = (yyvsp[0].np); }
 #line 1233 "y.tab.c"
     break;
 
   case 11: /* expr: expr '+' prim  */
-#line 35 "p3-1.yacc"
+#line 35 "p3-.yacc"
                                     { (yyval.np) = createNode(T_ADD, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1239 "y.tab.c"
     break;
 
   case 12: /* expr: expr '-' prim  */
-#line 36 "p3-1.yacc"
+#line 36 "p3-.yacc"
                                     { (yyval.np) = createNode(T_SUB, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1245 "y.tab.c"
     break;
 
   case 13: /* prim: NUM  */
-#line 38 "p3-1.yacc"
+#line 38 "p3-.yacc"
                                     { (yyval.np) = createNode(T_NUM, atoi(yytext), NULL); }
 #line 1251 "y.tab.c"
     break;
 
   case 14: /* prim: var  */
-#line 39 "p3-1.yacc"
+#line 39 "p3-.yacc"
                                     { (yyval.np) = createNode(T_VAR, (yyvsp[0].np), NULL); }
 #line 1257 "y.tab.c"
     break;
 
   case 15: /* prim: '(' expr ')'  */
-#line 40 "p3-1.yacc"
+#line 40 "p3-.yacc"
                                     { (yyval.np) = (yyvsp[-1].np); }
 #line 1263 "y.tab.c"
     break;
 
   case 16: /* prim: var PLUSPLUS  */
-#line 41 "p3-1.yacc"
+#line 41 "p3-.yacc"
                                     { (yyval.np) = createNode(T_PP, (yyvsp[-1].np), NULL); }
 #line 1269 "y.tab.c"
     break;
 
   case 17: /* var: IDENT  */
-#line 43 "p3-1.yacc"
+#line 43 "p3-.yacc"
                                     { (yyval.np) = lookup(yytext); }
 #line 1275 "y.tab.c"
     break;
 
   case 18: /* cond: expr '<' expr  */
-#line 45 "p3-1.yacc"
+#line 45 "p3-.yacc"
                            { (yyval.np) = createNode(T_LT, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1281 "y.tab.c"
     break;
 
   case 19: /* cond: expr '>' expr  */
-#line 46 "p3-1.yacc"
+#line 46 "p3-.yacc"
                            { (yyval.np) = createNode(T_GT, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1287 "y.tab.c"
     break;
 
   case 20: /* cond: expr GTE expr  */
-#line 47 "p3-1.yacc"
+#line 47 "p3-.yacc"
                            { (yyval.np) = createNode(T_GTE, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1293 "y.tab.c"
     break;
 
   case 21: /* cond: expr LTE expr  */
-#line 48 "p3-1.yacc"
+#line 48 "p3-.yacc"
                            { (yyval.np) = createNode(T_LTE, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1299 "y.tab.c"
     break;
 
   case 22: /* cond: expr EQ expr  */
-#line 49 "p3-1.yacc"
+#line 49 "p3-.yacc"
                            { (yyval.np) = createNode(T_EQ, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1305 "y.tab.c"
     break;
 
   case 23: /* cond: cond AND cond  */
-#line 50 "p3-1.yacc"
+#line 50 "p3-.yacc"
                            { (yyval.np) = createNode(T_AND, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1311 "y.tab.c"
     break;
 
   case 24: /* cond: cond OR cond  */
-#line 51 "p3-1.yacc"
+#line 51 "p3-.yacc"
                            { (yyval.np) = createNode(T_OR, (yyvsp[-2].np), (yyvsp[0].np)); }
 #line 1317 "y.tab.c"
     break;
 
   case 25: /* cond: '!' '(' cond ')'  */
-#line 52 "p3-1.yacc"
+#line 52 "p3-.yacc"
                            { (yyval.np) = createNode(T_NOT, (yyvsp[-1].np), NULL); }
 #line 1323 "y.tab.c"
     break;

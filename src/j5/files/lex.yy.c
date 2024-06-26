@@ -458,7 +458,7 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "p3-1.lex"
+#line 1 "p3-2.lex"
 #line 463 "lex.yy.c"
 
 #define INITIAL 0
@@ -676,7 +676,7 @@ YY_DECL
 		}
 
 	{
-#line 4 "p3-1.lex"
+#line 4 "p3-2.lex"
 
 #line 682 "lex.yy.c"
 
@@ -737,73 +737,73 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 5 "p3-1.lex"
+#line 5 "p3-2.lex"
 { return READ; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 6 "p3-1.lex"
+#line 6 "p3-2.lex"
 { return PRINT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 7 "p3-1.lex"
+#line 7 "p3-2.lex"
 { return WHILE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 8 "p3-1.lex"
+#line 8 "p3-2.lex"
 { return PLUSPLUS; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 9 "p3-1.lex"
+#line 9 "p3-2.lex"
 { return LTE; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 10 "p3-1.lex"
+#line 10 "p3-2.lex"
 { return GTE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 11 "p3-1.lex"
+#line 11 "p3-2.lex"
 { return EQ; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 12 "p3-1.lex"
+#line 12 "p3-2.lex"
 { return AND; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 13 "p3-1.lex"
+#line 13 "p3-2.lex"
 { return OR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 14 "p3-1.lex"
+#line 14 "p3-2.lex"
 { return IDENT; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 15 "p3-1.lex"
+#line 15 "p3-2.lex"
 { return NUM; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 16 "p3-1.lex"
+#line 16 "p3-2.lex"
 { return yytext[0]; }
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 17 "p3-1.lex"
+#line 17 "p3-2.lex"
 
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 18 "p3-1.lex"
+#line 18 "p3-2.lex"
 ECHO;
 	YY_BREAK
 #line 810 "lex.yy.c"
@@ -1811,4 +1811,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 18 "p3-1.lex"
+#line 18 "p3-2.lex"

@@ -1,0 +1,6 @@
+main {
+  read x;
+  while (x < 2) {
+    print x++;
+  }
+}
