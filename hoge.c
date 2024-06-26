@@ -1,11 +1,9 @@
 #include <stdio.h>
 
 int main() {
-  int a = 0;
-  while (!(a > 10)) {
-    a++;
+  int v0;
+  scanf("%d", &v0);
+  while (v0 <= 10) {
+    printf("%d", v0++);
   }
-  printf("%d\n", a);
-
-  return 0;
 }
