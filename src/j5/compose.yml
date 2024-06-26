@@ -1,8 +1,16 @@
 services:
   app:
-    image: 'tyasunao/uec-lexyacc:latest'
+    image: "tyasunao/uec-lexyacc:latest"
     ports:
-      - '0.0.0.0:8888:8888'
-    entrypoint: ["jupyter", "notebook","--ip=0.0.0.0","--allow-root","--no-browse"]
+      - "0.0.0.0:8888:8888"
+    entrypoint:
+      [
+        "jupyter",
+        "notebook",
+        "--ip=0.0.0.0",
+        "--allow-root",
+        "--no-browse",
+        "--NotebookApp.token=''",
+      ]
     volumes:
-      - './files:/home/uecstudent/files'
+      - "./files:/home/uecstudent/files"
