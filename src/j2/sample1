@@ -1,0 +1,54 @@
+#! /opt/homebrew/Cellar/icarus-verilog/12.0/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
+S_0x14cf04bf0 .scope module, "sample1_test" "sample1_test" 2 1;
+ .timescale 0 0;
+v0x14cf1a080_0 .var "x", 0 0;
+v0x14cf1a120_0 .var "y", 0 0;
+v0x14cf1a1d0_0 .net "z", 0 0, L_0x14cf1a2a0;  1 drivers
+S_0x14cf04d60 .scope module, "g1" "sample1" 2 4, 3 1 0, S_0x14cf04bf0;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "s";
+    .port_info 1 /INPUT 1 "a";
+    .port_info 2 /INPUT 1 "b";
+L_0x14cf1a2a0 .functor AND 1, v0x14cf1a080_0, v0x14cf1a120_0, C4<1>, C4<1>;
+v0x14cf0a430_0 .net "a", 0 0, v0x14cf1a080_0;  1 drivers
+v0x14cf19ee0_0 .net "b", 0 0, v0x14cf1a120_0;  1 drivers
+v0x14cf19f80_0 .net "s", 0 0, L_0x14cf1a2a0;  alias, 1 drivers
+    .scope S_0x14cf04bf0;
+T_0 ;
+    %vpi_call 2 7 "$dumpfile", "sample1.vcd" {0 0 0};
+    %vpi_call 2 8 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x14cf04bf0 {0 0 0};
+    %vpi_call 2 9 "$monitor", " %b %b %b", v0x14cf1a080_0, v0x14cf1a120_0, v0x14cf1a1d0_0, $stime {0 0 0};
+    %vpi_call 2 10 "$display", " x y z time" {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x14cf1a080_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x14cf1a120_0, 0, 1;
+    %delay 50, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x14cf1a120_0, 0, 1;
+    %delay 50, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x14cf1a080_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x14cf1a120_0, 0, 1;
+    %delay 50, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x14cf1a120_0, 0, 1;
+    %delay 50, 0;
+    %vpi_call 2 15 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "sample1_test.v";
+    "sample1.v";
