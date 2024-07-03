@@ -1,5 +1,4 @@
-# use 1st arg as output file name
-
+import os
 import sys
 
 
@@ -20,6 +19,5 @@ if __name__ == "__main__":
     print("Executing: ", cmd)
     print("Output below: ")
     print("--------------------------------------------------")
-    import os
 
     os.system(cmd)
