@@ -9,7 +9,45 @@
 
 ### モジュールeqの動作検証
 
-講義資料で示されたモジュールeqを、同じく示されたeqSimを用いてシミュレーションした。その結果は下のようになった。
+講義資料で示されたモジュールeqを、同じく示されたeqSimを用いてシミュレーションした。
+このモジュールeqは(a & b) | (~a & ~b)を計算するもので、a=bのときだけs=1となっている。
+
+```v
+module eq (
+    s,a,b
+);
+    input a, b;
+    output s;
+    wire na, nb, s1, s2;
+    assign na = ~a, nb = ~b;
+    assign s1 = a & b, s2 = na & nb;
+    assign s = s1 | s2;
+endmodule
+```
+
+eqSimは、上のモジュールeqに対して予想される4通りの入力をすべて与えて、それぞれの出力を確認するものである。
+
+```v
+module eqSim; /* 一致検出回路の */
+    wire s; /* シミュレーション */
+    reg x, y;
+    eq g1(s, x, y);
+    initial
+        begin
+        $dumpfile("eq.vcd");
+        $dumpvars(0, eqSim);
+        $monitor(" %b %b  %b  %b %b", x, y,  g1.s1, g1.s2,s, $stime);
+        $display(" x y s1 s2 s       time");
+        x=0; y=0;
+        #50 y=1;
+        #50 x=1; y=0;
+        #50 y=1;
+        #50 $finish;
+        end
+endmodule
+```
+
+その結果は下のようになった。
 
 ```plaintext
 VCD info: dumpfile eq.vcd opened for output.
@@ -20,6 +58,10 @@ VCD info: dumpfile eq.vcd opened for output.
  1 1 1       150
 eqSim.v:15: $finish called at 200 (1s)
 ```
+
+また、その波形をgtkwaveで表示した結果は下のようになった。
+
+![](./ex1.png)
 
 このシミュレーションはすべての入力例をカバーしており、x=yのときのみs=1となることが確認できている。
 
@@ -65,7 +107,13 @@ eqSim.v:15: $finish called at 200 (1s)
 
 入力信号 a, b, c, d を受け取り，a = b とc = d がともに成り立
 つとき出力信号sを1に，それ以外のときsを0にする回路の
-モジュールdoubleEqを次のように作成した。
+モジュールdoubleEqを作成する。
+
+このモジュールの簡易的な回路図は次のようになっている。
+
+![](./IMG_2391.jpeg)
+
+これをもとに、以下のようなdoubleEqモジュールを作成した。
 
 ```v
 module doubleEq(
