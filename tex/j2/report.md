@@ -60,3 +60,22 @@ eqSim.v:15: $finish called at 200 (1s)
 ```
 
 これにより、内部的にもs1とs2が正しく計算され、s1|s2から期待されるsが出力されていることが確認できた。
+
+## 問題2
+
+入力信号 a, b, c, d を受け取り，a = b とc = d がともに成り立
+つとき出力信号sを1に，それ以外のときsを0にする回路の
+モジュールdoubleEqを次のように作成した。
+
+```v
+module doubleEq(
+    s,a,b,c,d
+);
+    input a, b, c, d;
+    output s;
+    wire w1, w2;
+    eq m1(w1, a, b);
+    eq m2(w2, c, d);
+    assign s = w1 & w2;
+endmodule
+```

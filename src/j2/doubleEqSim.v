@@ -6,8 +6,8 @@ module doubleEqSim; /* 一致検出回路の */
         begin
         $dumpfile("doubleEq.vcd");
         $dumpvars(0, doubleEqSim);
-        $monitor(" %b %b %b %b %b %b  %b", a, b, c, d, s, g1.w1, g1.w2, $stime);
-        $display(" a b c d s w1 w2       time");
+        $monitor(" %b %b %b %b  %b  %b  %b", a, b, c, d, s, g1.w1, g1.w2, $stime);
+        $display(" a b c d w1 w2  s      time");
         /* test all case */
         a=0; b=0; c=0; d=0;
         #50 a=0; b=0; c=0; d=1;
