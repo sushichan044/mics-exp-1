@@ -180,6 +180,9 @@ endmodule
 この結果、$b, s1', s2'$を以下のように定義した。
 
 $$
-b &= a s_1 s_2 \
-s1' &= a s_1 s_2 + a s_1' s_2'
+\begin{align}
+b &= a s_1 s_2 \notag \\
+s1' &= s_1 \bar{s_2} + \bar{a} s_1 + a \bar{s_1} s_2 \notag \\
+s2' &= \bar{a} s_2 + a \bar{s_2} \notag
+\end{align}
 $$
