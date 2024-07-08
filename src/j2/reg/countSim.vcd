@@ -1,0 +1,153 @@
+$date
+	Mon Jul  8 15:25:53 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module countSim $end
+$var wire 1 ! ck $end
+$var wire 1 " b $end
+$var reg 1 # a $end
+$scope module clk1 $end
+$var reg 1 ! ck $end
+$upscope $end
+$scope module dut $end
+$var wire 1 # a $end
+$var wire 1 " b $end
+$var wire 1 ! ck $end
+$var wire 1 $ d1 $end
+$var wire 1 % d2 $end
+$var wire 1 & d3 $end
+$var wire 1 ' d4 $end
+$var wire 1 ( e1 $end
+$var wire 1 ) e2 $end
+$var wire 1 * e3 $end
+$var wire 1 + na $end
+$var wire 1 , ns1 $end
+$var wire 1 - ns2 $end
+$var wire 1 . s2 $end
+$var wire 1 / s1 $end
+$scope module f1 $end
+$var wire 1 $ D $end
+$var wire 1 ! ck $end
+$var reg 1 / Q $end
+$upscope $end
+$scope module f2 $end
+$var wire 1 ( D $end
+$var wire 1 ! ck $end
+$var reg 1 . Q $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+0/
+0.
+1-
+1,
+1+
+0*
+0)
+0(
+0'
+0&
+0%
+0$
+0#
+0"
+0!
+$end
+#50
+1!
+#100
+1(
+0+
+1)
+0!
+1#
+#150
+1!
+#200
+0-
+1*
+1(
+1.
+1+
+0)
+0!
+0#
+#250
+1!
+#300
+0(
+1$
+0*
+1%
+0+
+0!
+1#
+#350
+1!
+#400
+1'
+1$
+1-
+0,
+1&
+0%
+0.
+1/
+1+
+0!
+0#
+#450
+1!
+#500
+0&
+1(
+0+
+1)
+0!
+1#
+#550
+1!
+#600
+0'
+0-
+1&
+1*
+1(
+1.
+1+
+0)
+0!
+0#
+#650
+1!
+#700
+0$
+0(
+0&
+0*
+1"
+0+
+0!
+1#
+#750
+1!
+#800
+1-
+1,
+0"
+0.
+0/
+1+
+0!
+0#
