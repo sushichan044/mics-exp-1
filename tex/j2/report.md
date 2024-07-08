@@ -111,7 +111,7 @@ eqSim.v:15: $finish called at 200 (1s)
 
 このモジュールの簡易的な回路図は次のようになっている。
 
-![](./IMG_2391.jpeg)
+![](./ex2_kairo.jpeg)
 
 これをもとに、以下のようなdoubleEqモジュールを作成した。
 
@@ -186,3 +186,66 @@ s1' &= s_1 \bar{s_2} + \bar{a} s_1 + a \bar{s_1} s_2 \notag \\
 s2' &= \bar{a} s_2 + a \bar{s_2} \notag
 \end{align}
 $$
+
+この論理式をもとに、以下のようなモジュールcountを作成した。
+
+```v
+module count (
+    a,ck,b
+);
+    input a, ck;
+    output b;
+    wire na;
+    wire s1, s2, t;
+    wire d1, d2, d3, d4;
+    wire e1, e2, e3;
+    dffn f1(s1,d1,ck);
+    dffn f2(s2,e1,ck);
+    assign na = ~a;
+    assign ns1 = ~s1;
+    assign ns2 = ~s2;
+
+    assign d4 = s1 & ns2, d3 = na & s1, d2 = a & ns1 & s2, d1 = d4 | d3 | d2;
+    assign e3 = na & s2, e2 = a & ns2, e1 = e3 | e2;
+    assign b = a & s1 & s2;
+endmodule
+```
+
+また、このcountモジュールをシミュレーションするcountSimモジュールを以下のように作成した。
+$a$の値を切り替える感覚を100サイクルにすることで、$a$を1回切り替える間にclockが0,1両方の場合をテストできるので、効率よくテストカバレッジを高めることができた。
+
+```v
+module countSim;
+    reg a;
+    wire b;
+
+    clk clk1(ck);
+    count dut (a,ck,b);
+
+    initial
+        begin
+        $dumpfile("countSim.vcd");
+        $dumpvars(0, countSim);
+        $monitor("%b  %b %b  %b  %b", a, ck, b, dut.s1, dut.s2, $stime);
+        $display("a ck b s1 s2       time");
+
+        a = 0;
+        #100 a = 1;
+        #100 a = 0;
+        #100 a = 1;
+        #100 a = 0;
+        #100 a = 1;
+        #100 a = 0;
+        #100 a = 1;
+        #100 a = 0;
+        $finish;
+        end
+endmodule
+```
+
+このテストの出力から、状態$s1$と$s2$が正しく遷移していることが確認できた。
+また、gtkwaveを用いて波形を表示すると以下のようになった。
+
+![](./ex4_wave.png)
+
+この波形から、正しい状態遷移の結果$s1s2$が$11$から$00$に遷移するときに$b=1$となっていることが確認できた。
