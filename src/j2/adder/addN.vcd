@@ -1,0 +1,57 @@
+$date
+	Wed Jul 10 14:17:00 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module addNSim $end
+$var wire 8 ! sum [7:0] $end
+$var wire 1 " cu $end
+$var reg 8 # a [7:0] $end
+$var reg 8 $ b [7:0] $end
+$var reg 1 % ci $end
+$scope module g1 $end
+$var wire 8 & a [7:0] $end
+$var wire 8 ' b [7:0] $end
+$var wire 1 % ci $end
+$var wire 8 ( sum [7:0] $end
+$var wire 1 " cu $end
+$var wire 9 ) c [8:0] $end
+$var parameter 32 * N $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b1000 *
+$end
+#0
+$dumpvars
+b110 )
+b110 (
+b11 '
+b11 &
+0%
+b11 $
+b11 #
+0"
+b110 !
+$end
+#10
+b111 !
+b111 (
+b111 )
+1%
+#20
+1"
+b0 !
+b0 (
+b111111110 )
+0%
+b1 $
+b1 '
+b11111111 #
+b11111111 &
