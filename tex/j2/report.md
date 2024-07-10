@@ -500,3 +500,95 @@ regNSim.v:39: $finish called at 300 (1s)
 ![regN](./ex6-wave.png)
 
 出力$q$が、クロックが立ち下がるときにloadに1が入力されているときだけ$d$の値に更新されることが視覚的に確認できた。
+
+## 課題7
+
+講義資料で示されたNビット加減算器の図解を参考にして、Nビット加減算器calcNを作成した。
+
+```v
+module calcN (
+    a, b, sum, k, cu
+);
+    parameter N = 8;
+
+    input [N-1:0] a, b;
+    input k;
+    output [N-1:0] sum;
+    output cu;
+
+    wire[N-1:0] B = k ? ~b : b;
+    addN #(
+        .N(N)
+    ) g1(a, B, sum, k, cu);
+
+endmodule
+```
+
+また、このcalcNモジュールをシミュレーションするcalcNSimモジュールを以下のように作成した。
+
+```v
+module calcNSim (
+
+);
+    reg [7:0] a, b;
+    reg k;
+    wire [7:0] sum;
+    wire cu;
+    calcN #8 g1(a, b, sum, k, cu);
+
+    initial begin
+        $dumpfile("calcN.vcd");
+        $dumpvars(0, calcNSim);
+        $monitor(" %b  %b  %b  %b  %b", a, b, k, sum, cu, $stime);
+        $display("        a         b  k       sum  cu      time");
+
+        // test add
+        a = 8'b00000011;
+        b = 8'b00000011;
+        k = 0;
+
+        // test sub
+        #10;
+        a = 8'b00000011;
+        b = 8'b00000011;
+        k = 1;
+
+        #10;
+
+        // test add overflow
+        a = 8'b11111111;
+        b = 8'b00000001;
+        k = 0;
+
+        #10;
+
+        // test sub overflow
+        a = 8'b00000000;
+        b = 8'b00000001;
+        k = 1;
+
+        #10 $finish;
+    end
+endmodule
+```
+
+このテストの出力は下のようになった。
+
+```bash
+$ ./calcNSim
+VCD info: dumpfile calcN.vcd opened for output.
+        a         b  k       sum  cu      time
+ 00000011  00000011  0  00000110  0         0
+ 00000011  00000011  1  00000001  1        10
+ 11111111  00000001  0  00000000  1        20
+ 00000000  00000001  1  11111111  0        30
+calcNSim.v:41: $finish called at 40 (1s)
+```
+
+k = 0のときに加算、k = 1のときに減算を行うことが確認できた。
+また、加算時はcu=1ならオーバーフロー、減算時はcu=0ならアンダーフローとなることも確認できた。
+
+gtkwaveを用いて波形を表示すると以下のようになった。
+aとbに同じ入力をしていても、kを切り替えることで加算減算が切り替わり異なる値を正しく出力していることが確認できた。
+
+![calcN](./ex7-wave.png)
