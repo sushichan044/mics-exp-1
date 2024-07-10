@@ -337,3 +337,76 @@ addNSim.v:33: $finish called at 30 (1s)
 
 これらの結果から、addNモジュールが正しく動作していることが確認できた。
 ビットベクトルを用いることで、1ビット加算器の実装を大きく変えることなくNビット加算器を実装できることがわかった。
+
+## 課題6
+
+講義資料で示された1ビットレジスタを参考にして、NビットレジスタregNを作成した。
+
+### dffnモジュールの改良
+
+まず、dffnモジュールをNビット入出力に対応させる必要があると考え、次のように改良した。
+
+```v
+module dffn (
+    Q,D,ck
+);
+    parameter N = 1;
+
+    input [N-1:0] D;
+    input ck;
+    output [N-1:0] Q;
+    reg [N-1:0] Q;
+    initial
+        Q = {N{1'b0}};
+    always @(negedge ck)
+        Q = D;
+endmodule
+```
+
+あわせて、dffnモジュールをシミュレーションするdffnSimモジュールも以下のように改良した。
+
+```v
+module dffnSim;
+    reg[1:0] i;
+    wire[1:0] o;
+    clk clk1(ck);
+    dffn #2 dffn1(o, i, ck);
+    initial
+        begin
+        $dumpfile("dffnSim.vcd");
+        $dumpvars(0, dffnSim);
+        $monitor(" %b %b %b", ck,i,o,$stime);
+        $display("ck  i  o      time");
+        i = 2'b00;
+        #100 i = 2'b01;
+        #200 i = 2'b10;
+        #100 $finish;
+        end
+endmodule
+```
+
+このテストの出力は下のようになった。
+
+```bash
+$ ./dffnSim
+VCD info: dumpfile dffnSim.vcd opened for output.
+ck  i  o      time
+ 0 00 00         0
+ 1 00 00        50
+ 0 01 01       100
+ 1 01 01       150
+ 0 01 01       200
+ 1 01 01       250
+ 0 10 10       300
+ 1 10 10       350
+dffnSim.v:15: $finish called at 400 (1s)
+ 0 10 10       400
+```
+
+また、gtkwaveを用いて波形を表示すると以下のようになった。
+
+![dffn](./ex6-dffn.png)
+
+これらの結果から、仕様を崩すことなくdffnモジュールをNビット入出力に対応させることができたと判断した。
+
+### regNモジュールの作成
