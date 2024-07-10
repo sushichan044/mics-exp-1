@@ -29,6 +29,8 @@ module addNSim (
         a = 8'b11111111;
         b = 8'b00000001;
         ci = 0;
+
+        #10 $finish;
     end
 
 endmodule

@@ -249,3 +249,91 @@ endmodule
 ![](./ex4_wave.png)
 
 この波形から、正しい状態遷移の結果$s1s2$が$11$から$00$に遷移するときに$b=1$となっていることが確認できた。
+
+## 課題5
+
+資料で示された1ビット加算器を参考にして、Nビット加算器addNを作成した。
+
+```v
+module addN (
+    a, b, sum, ci, cu
+);
+    parameter N = 8;
+
+    input [N-1:0] a, b;
+    input ci;
+    output [N-1:0] sum;
+    output cu;
+
+    wire [N-1:0] sum;
+    wire [N:0] c; // carries
+    assign c[0] = ci;
+
+
+    assign sum = a ^ b ^ c[N-1:0];
+    assign c[N:1] = (a & b) | (b & c[N-1:0]) | (a & c[N-1:0]);
+
+
+    assign cu = c[N];
+endmodule
+```
+
+また、このaddNモジュールをシミュレーションするaddNSimモジュールを以下のように作成した。
+
+```v
+module addNSim (
+
+);
+    reg [7:0] a, b;
+    reg ci;
+    wire [7:0] sum;
+    wire cu;
+    addN #8 g1(a, b, sum, ci, cu);
+
+    initial begin
+        $dumpfile("addN.vcd");
+        $dumpvars(0, addNSim);
+        $monitor(" %b  %b    %b  %b   %b", a, b,ci, sum, cu, $stime);
+        $display("        a         b   ci       sum  cu      time");
+
+        // test normal
+        a = 8'b00000011;
+        b = 8'b00000011;
+        ci = 0;
+
+        // test carry in(下の位から繰り上がることはないが念の為)
+        #10;
+        a = 8'b00000011;
+        b = 8'b00000011;
+        ci = 1;
+
+        #10;
+        // test overflow
+        a = 8'b11111111;
+        b = 8'b00000001;
+        ci = 0;
+
+        #10 $finish;
+    end
+
+endmodule
+```
+
+このテストの出力は下のようになった。
+
+```bash
+$ ./addNSim
+VCD info: dumpfile addN.vcd opened for output.
+        a         b   ci       sum  cu      time
+ 00000011  00000011    0  00000110   0         0
+ 00000011  00000011    1  00000111   0        10
+ 11111111  00000001    0  00000000   1        20
+addNSim.v:33: $finish called at 30 (1s)
+```
+
+また、gtkwaveを用いて波形を表示すると以下のようになった。
+
+![addN](./ex5.png)
+
+これらの結果から、addNモジュールが正しく動作していることが確認できた。
+ビットベクトルを用いることで、1ビット加算器の実装を大きく変えることなくNビット加算器を実装できることがわかった。
