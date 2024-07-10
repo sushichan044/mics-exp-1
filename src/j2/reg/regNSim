@@ -1,0 +1,108 @@
+#! /opt/homebrew/Cellar/icarus-verilog/12.0/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
+S_0x134e07360 .scope module, "regNSim" "regNSim" 2 1;
+ .timescale 0 0;
+v0x134e22240_0 .net "ck", 0 0, v0x134e126b0_0;  1 drivers
+v0x134e222e0_0 .var "d", 7 0;
+v0x134e22380_0 .var "l", 0 0;
+v0x134e22450_0 .net "q", 7 0, v0x134e21d30_0;  1 drivers
+S_0x134e074d0 .scope module, "c1" "clk" 2 4, 3 1 0, S_0x134e07360;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "ck";
+v0x134e126b0_0 .var "ck", 0 0;
+S_0x134e215e0 .scope module, "g1" "regN" 2 7, 4 1 0, S_0x134e07360;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "l";
+    .port_info 1 /INPUT 8 "d";
+    .port_info 2 /INPUT 1 "ck";
+    .port_info 3 /OUTPUT 8 "q";
+P_0x134e217a0 .param/l "N" 0 4 4, +C4<00000000000000000000000000001000>;
+v0x134e21e60_0 .net "ck", 0 0, v0x134e126b0_0;  alias, 1 drivers
+v0x134e21f40_0 .net "d", 7 0, v0x134e222e0_0;  1 drivers
+v0x134e21fd0_0 .net "d1", 7 0, L_0x134e22520;  1 drivers
+v0x134e22080_0 .net "l", 0 0, v0x134e22380_0;  1 drivers
+v0x134e22110_0 .net "q", 7 0, v0x134e21d30_0;  alias, 1 drivers
+L_0x134e22520 .functor MUXZ 8, v0x134e21d30_0, v0x134e222e0_0, v0x134e22380_0, C4<>;
+S_0x134e21940 .scope module, "f1" "dffn" 4 12, 5 1 0, S_0x134e215e0;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 8 "Q";
+    .port_info 1 /INPUT 8 "D";
+    .port_info 2 /INPUT 1 "ck";
+P_0x134e21b00 .param/l "N" 0 5 4, +C4<00000000000000000000000000001000>;
+v0x134e21c70_0 .net "D", 7 0, L_0x134e22520;  alias, 1 drivers
+v0x134e21d30_0 .var "Q", 7 0;
+v0x134e21dd0_0 .net "ck", 0 0, v0x134e126b0_0;  alias, 1 drivers
+E_0x134e21c10 .event negedge, v0x134e126b0_0;
+    .scope S_0x134e074d0;
+T_0 ;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x134e126b0_0, 0, 1;
+    %end;
+    .thread T_0;
+    .scope S_0x134e074d0;
+T_1 ;
+    %delay 50, 0;
+    %load/vec4 v0x134e126b0_0;
+    %inv;
+    %store/vec4 v0x134e126b0_0, 0, 1;
+    %jmp T_1;
+    .thread T_1;
+    .scope S_0x134e21940;
+T_2 ;
+    %pushi/vec4 0, 0, 8;
+    %store/vec4 v0x134e21d30_0, 0, 8;
+    %end;
+    .thread T_2;
+    .scope S_0x134e21940;
+T_3 ;
+    %wait E_0x134e21c10;
+    %load/vec4 v0x134e21c70_0;
+    %store/vec4 v0x134e21d30_0, 0, 8;
+    %jmp T_3;
+    .thread T_3;
+    .scope S_0x134e07360;
+T_4 ;
+    %vpi_call 2 10 "$dumpfile", "regN.vcd" {0 0 0};
+    %vpi_call 2 11 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x134e07360 {0 0 0};
+    %vpi_call 2 12 "$monitor", "   %b     %b    %b  %b %b", v0x134e22380_0, v0x134e222e0_0, v0x134e21fd0_0, v0x134e22240_0, v0x134e22450_0, $stime {0 0 0};
+    %vpi_call 2 13 "$display", "load         data          d1 ck        q      time" {0 0 0};
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x134e22380_0, 0, 1;
+    %pushi/vec4 0, 0, 8;
+    %store/vec4 v0x134e222e0_0, 0, 8;
+    %delay 50, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x134e22380_0, 0, 1;
+    %pushi/vec4 3, 0, 8;
+    %store/vec4 v0x134e222e0_0, 0, 8;
+    %delay 50, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x134e22380_0, 0, 1;
+    %delay 50, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x134e22380_0, 0, 1;
+    %pushi/vec4 15, 0, 8;
+    %store/vec4 v0x134e222e0_0, 0, 8;
+    %delay 50, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x134e22380_0, 0, 1;
+    %delay 50, 0;
+    %delay 50, 0;
+    %vpi_call 2 39 "$finish" {0 0 0};
+    %end;
+    .thread T_4;
+# The file index is used to find the file name in the following table.
+:file_names 6;
+    "N/A";
+    "<interactive>";
+    "regNSim.v";
+    "clk.v";
+    "regN.v";
+    "dffn.v";

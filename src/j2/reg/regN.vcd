@@ -1,0 +1,80 @@
+$date
+	Wed Jul 10 15:27:14 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module regNSim $end
+$var wire 8 ! q [7:0] $end
+$var wire 1 " ck $end
+$var reg 8 # d [7:0] $end
+$var reg 1 $ l $end
+$scope module c1 $end
+$var reg 1 " ck $end
+$upscope $end
+$scope module g1 $end
+$var wire 1 " ck $end
+$var wire 8 % d [7:0] $end
+$var wire 1 $ l $end
+$var wire 8 & q [7:0] $end
+$var wire 8 ' d1 [7:0] $end
+$var parameter 32 ( N $end
+$scope module f1 $end
+$var wire 8 ) D [7:0] $end
+$var wire 1 " ck $end
+$var parameter 32 * N $end
+$var reg 8 + Q [7:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b1000 *
+b1000 (
+$end
+#0
+$dumpvars
+b0 +
+b0 )
+b0 '
+b0 &
+b0 %
+0$
+b0 #
+0"
+b0 !
+$end
+#50
+b11 '
+b11 )
+b11 #
+b11 %
+1$
+1"
+#100
+b11 !
+b11 &
+b11 +
+0$
+0"
+#150
+b1111 '
+b1111 )
+b1111 #
+b1111 %
+1$
+1"
+#200
+b1111 !
+b1111 &
+b1111 +
+0$
+0"
+#250
+1"
+#300
+0"
