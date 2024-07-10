@@ -410,3 +410,93 @@ dffnSim.v:15: $finish called at 400 (1s)
 これらの結果から、仕様を崩すことなくdffnモジュールをNビット入出力に対応させることができたと判断した。
 
 ### regNモジュールの作成
+
+次に、NビットレジスタregNモジュールを作成した。
+
+```v
+module regN (
+    l, d, ck, q
+);
+    parameter N = 8;
+
+    input l;
+    input [N-1:0] d;
+    input ck;
+    output [N-1:0] q;
+    wire [N-1:0] d1;
+
+    dffn #8 f1(q,d1,ck);
+    assign d1 = l ? d : q;
+
+endmodule
+```
+
+資料で示されたようにconditional assignを用いることで、少な記述量でload信号の値に応じて$d1$に送られる信号を制御することができた。
+
+また、このregNモジュールをシミュレーションするregNSimモジュールを以下のように作成した。
+
+```v
+module regNSim ();
+    reg l;
+    reg [7:0] d;
+    clk c1(ck);
+    wire [7:0] q;
+
+    regN #8 g1(l, d, ck, q);
+
+    initial begin
+        $dumpfile("regN.vcd");
+        $dumpvars(0, regNSim);
+        $monitor("   %b    %b  %b %b", l, d, ck, q, $stime);
+        $display("load        data ck        q      time");
+
+
+        l = 0;
+        d = 8'b00000000;
+        #50;
+
+        // pass first data
+        l = 1;
+        d = 8'b00000011;
+        #50;
+
+        // get first data
+        l = 0;
+        #50;
+
+        // pass second data
+        l = 1;
+        d = 8'b00001111;
+
+        #50;
+
+        // get second data
+        l = 0;
+        #50;
+
+        #50 $finish;
+    end
+
+endmodule
+```
+
+このテストの出力は下のようになった。
+
+```bash
+$ ./regNSim
+load        data ck        q      time
+   0    00000000  0 00000000         0
+   1    00000011  1 00000000        50
+   0    00000011  0 00000011       100
+   1    00001111  1 00000011       150
+   0    00001111  0 00001111       200
+   0    00001111  1 00001111       250
+   0    00001111  0 00001111       300
+regNSim.v:39: $finish called at 300 (1s)
+```
+
+また、gtkwaveを用いて波形を表示すると以下のようになった。
+
+![regN](./ex6-wave.png)
+
+出力$q$が、クロックが立ち下がるときにloadに1が入力されているときだけ$d$の値に更新されることが視覚的に確認できた。

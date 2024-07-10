@@ -9,8 +9,8 @@ module regNSim ();
     initial begin
         $dumpfile("regN.vcd");
         $dumpvars(0, regNSim);
-        $monitor("   %b     %b    %b  %b %b", l, d,g1.d1, ck, q, $stime);
-        $display("load         data          d1 ck        q      time");
+        $monitor("   %b    %b  %b %b", l, d, ck, q, $stime);
+        $display("load        data ck        q      time");
 
 
         l = 0;
