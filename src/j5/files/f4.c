@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 struct stab {
   int val;
   char name[20];
@@ -41,7 +44,6 @@ typedef struct Node {
     struct Node* right;
 } Node;
 
-
 // 引数にとる文字列が表にあれば見つかった位置を返して，なければ追加する関数
 int lookup(char *s) {
   int i;
@@ -72,44 +74,42 @@ Node* createNode(int node_type, Node* left, Node* right) {
     return newNode;
 }
 
-void _emit_c(Node* node) {
+void _emit_js(Node* node) {
   if (node == NULL) {
     return;
   }
   switch (node->node_type) {
     case T_STLIST:
-      if (node->left != NULL) { _emit_c(node->left); }
-      _emit_c(node->right);
+      if (node->left != NULL) { _emit_js(node->left); }
+      _emit_js(node->right);
       break;
     case T_ASSIGN:
-      printf("\tv%d = ", node->left);
-      _emit_c(node->right);
+      printf("v%d = ", node->left);
+      _emit_js(node->right);
       printf(";\n");
       break;
     case T_READ:
-      printf("\tscanf(\"%%d\", &v%d);\n", node->left);
+      printf("v%d = await readInt();\n", node->left);
       break;
     case T_PRINT:
-      printf("\tprintf(\"%%d\",");
-      _emit_c(node->left);
+      printf("console.log(");
+      _emit_js(node->left);
       printf(");\n");
       break;
     case T_PRINTLN:
-      printf("\tprintf(\"%%d\",");
-      _emit_c(node->left);
+      printf("console.log(");
+      _emit_js(node->left);
       printf(");\n");
-      printf("\tprintf(\"\\n\");");
-      printf("\n");
       break;
     case T_ADD:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" + ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_SUB:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" - ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_NUM:
       printf("%d", node->left);
@@ -118,100 +118,101 @@ void _emit_c(Node* node) {
       printf("v%d", node->left);
       break;
     case T_WHILE:
-      printf("\twhile (");
-      _emit_c(node->left);
-      printf(") {\n\t");
-      _emit_c(node->right);
-      printf("\t}\n");
+      printf("while (");
+      _emit_js(node->left);
+      printf(") {\n");
+      _emit_js(node->right);
+      printf("}\n");
       break;
     case T_LT:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" < ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_GT:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" > ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_LTE:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" <= ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_GTE:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" >= ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_EQ:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" == ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_NOT:
       printf("!");
-      _emit_c(node->left);
+      _emit_js(node->left);
       break;
     case T_AND:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" && ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_OR:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" || ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_PP:
       printf("v%d++", node->left);
       break;
     case T_BLOCK:
-      _emit_c(node->left);
+      _emit_js(node->left);
       break;
     case T_IF:
-      printf("\tif (");
-      _emit_c(node->left); /* 条件式 */
-      printf(") {\n\t");
-      _emit_c(node->right); /* 文 */
-      printf("\t}\n");
+      printf("if (");
+      _emit_js(node->left); /* 条件式 */
+      printf(") {\n");
+      _emit_js(node->right); /* 文 */
+      printf("}\n");
       break;
     case T_BREAK:
-      printf("\tbreak;\n");
+      printf("break;\n");
       break;
     case T_TRUE:
-      printf("1");
+      printf("true");
       break;
     case T_FALSE:
-      printf("0");
+      printf("false");
       break;
     case T_MUL:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" * ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_DIV:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" / ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
     case T_MOD:
-      _emit_c(node->left);
+      _emit_js(node->left);
       printf(" %% ");
-      _emit_c(node->right);
+      _emit_js(node->right);
       break;
   }
 }
 
-void emit_c(Node* node) {
-  printf("#include <stdio.h>\n");
-  printf("int main() {\n");
+void emit_js(Node* node) {
+  printf("const readline=require('node:readline');function prompt(t){let e=readline.createInterface({input:process.stdin,output:process.stdout});return new Promise(n=>{e.question(t,t=>{e.close(),n(t)})})}async function readInt(){let t=await prompt('Enter value:'),e=parseInt(t,10);return isNaN(e)?await readInt():e}\n\n");
+  printf("const main = async () => {\n");
   int i;
   for (i = 0; i < stabuse; i++) {
-    printf("\tint v%d;\n", i);
+    printf("let v%d;\n", i);
   }
-  _emit_c(node);
-  printf("}\n");
+  _emit_js(node);
+  printf("\n");
+  printf("}\n\n void main();");
 }
 
 #include "y.tab.c"
