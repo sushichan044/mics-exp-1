@@ -86,7 +86,7 @@ mypy-extensions==1.0.0
     # via mypy
 nest-asyncio==1.6.0
     # via ipykernel
-numpy==2.0.0
+numpy==1.26.4
     # via contourpy
     # via matplotlib
     # via mics-exp-1
@@ -114,6 +114,7 @@ prompt-toolkit==3.0.47
     # via ipython
 psutil==6.0.0
     # via ipykernel
+    # via pyperf
 ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.2
@@ -128,6 +129,8 @@ pygments==2.18.0
     # via mics-exp-1
 pyparsing==3.1.2
     # via matplotlib
+pyperf==2.7.0
+    # via mics-exp-1
 python-dateutil==2.9.0.post0
     # via faker
     # via jupyter-client

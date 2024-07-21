@@ -28,3 +28,14 @@ void copy_file_stdio(const char *src, const char *dst) {
   fclose(src_file);
   fclose(dst_file);
 }
+
+int main(int argc, char const *argv[]) {
+  if (argc != 3) {
+    fprintf(stderr, "Usage: %s <source> <destination>\n", argv[0]);
+    return 1;
+  }
+  char const *source = argv[1];
+  char const *destination = argv[2];
+  copy_file_stdio(source, destination);
+  return 0;
+}

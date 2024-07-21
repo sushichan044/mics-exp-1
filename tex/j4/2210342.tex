@@ -202,6 +202,87 @@ int main(int argc, char const *argv[]) {
 
 \end{lstlisting}
 
+また,このmycp関数の性能を評価する際の対照として,\ref{code:ex-2}のような標準ライブラリ関数を用いたコピー関数を作成した.
+
+\begin{lstlisting}[language={C}, caption={比較用のコピー関数のソースコード}, label={code:ex-2}]
+#include <stdio.h>
+#include <stdlib.h>
+
+void copy_file_stdio(const char *src, const char *dst) {
+  FILE *src_file = fopen(src, "rb");
+  if (src_file == NULL) {
+    perror("Error opening source file");
+    exit(EXIT_FAILURE);
+  }
+
+  FILE *dst_file = fopen(dst, "wb");
+  if (dst_file == NULL) {
+    perror("Error opening destination file");
+    fclose(src_file);
+    exit(EXIT_FAILURE);
+  }
+
+  int ch;
+  while ((ch = fgetc(src_file)) != EOF) {
+    if (fputc(ch, dst_file) == EOF) {
+      perror("Error writing to destination file");
+      fclose(src_file);
+      fclose(dst_file);
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  fclose(src_file);
+  fclose(dst_file);
+}
+
+int main(int argc, char const *argv[]) {
+  if (argc != 3) {
+    fprintf(stderr, "Usage: %s <source> <destination>\n", argv[0]);
+    return 1;
+  }
+  char const *source = argv[1];
+  char const *destination = argv[2];
+  copy_file_stdio(source, destination);
+  return 0;
+}
+
+\end{lstlisting}
+
+これらの関数を用いて,コピー対象とするファイルのサイズを$16^1 \sim 16^9$バイトの間で変えながら,それぞれの関数の性能を評価した.
+性能評価には,GNU timeコマンドを用い,実行時間を$10^{-2}$秒単位で測定した.
+
+まず,mycp関数の測定結果は\ref{fig:ex-1-mycp}のようになった.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{./mycp.png}
+	\caption{mycp関数の性能測定結果}
+	\label{fig:ex-1-mycp}
+\end{figure}
+
+次に,標準ライブラリ関数を用いたコピー関数の測定結果は\ref{fig:ex-1-stdio}のようになった.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{./syscp.png}
+	\caption{標準ライブラリ関数を用いたコピー関数の性能測定結果}
+	\label{fig:ex-1-stdio}
+\end{figure}
+
+2つの関数の測定結果で共通している点は,ファイルサイズが$16^6$バイト($1$メガバイト)程度までは$10^{-2}$秒単位での実行時間がほぼ一定であることである.
+また,ファイルサイズが$16^7$バイト($10$メガバイト)程度を超えると,どちらの関数も実行時間がtimeコマンドで測定できる程度になることがわかる.
+
+一方で,実行時間が増えてきてからの傾向については,mycp関数と標準ライブラリ関数を用いたコピー関数で異なる点がみられる.
+独自に作成したmycp関数の実行時間はsystem timeが占める割合が大きいが,標準ライブラリ関数を用いたコピー関数の実行時間はuser timeが占める割合が大きい.
+
+この違いとしては, システムコールの回数の違いが考えられる.
+mycp関数は,readとwriteのシステムコールを用いてファイルのコピーを行っているため,システムコールの回数が多くなる.
+
+
+
+
+
 \section{課題2}
 \label{sec:ex-2}
 

@@ -56,7 +56,7 @@ matplotlib==3.9.0
     # via pandasai
 mpmath==1.3.0
     # via sympy
-numpy==2.0.0
+numpy==1.26.4
     # via contourpy
     # via matplotlib
     # via mics-exp-1
@@ -73,6 +73,8 @@ pandasai==2.2.5
 pillow==10.3.0
     # via matplotlib
     # via pandasai
+psutil==6.0.0
+    # via pyperf
 pydantic==2.7.4
     # via openai
     # via pandasai
@@ -82,6 +84,8 @@ pygments==2.18.0
     # via mics-exp-1
 pyparsing==3.1.2
     # via matplotlib
+pyperf==2.7.0
+    # via mics-exp-1
 python-dateutil==2.9.0.post0
     # via faker
     # via matplotlib

@@ -6,10 +6,11 @@ authors = [
     { name = "sushi-chaaaan", email = "mail@sushichan.live" }
 ]
 dependencies = [
-    "numpy>=1.26.4",
+    "numpy==1.26.4",
     "pandasai>=2.0.37",
     "pygments>=2.18.0",
     "sympy>=1.12",
+    "pyperf>=2.7.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.11"
