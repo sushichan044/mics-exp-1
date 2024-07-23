@@ -1,12 +1,11 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-main() {
-  printf("getpid() = %d\n", getpid());
-  printf("getppid() = %d\n", getppid());
-  if (fork() == 0) sleep(3);
-
-  printf("getpid() = %d\n", getpid());
-  printf("getppid() = %d\n", getppid());
-
+int main() {
+  int *p;
+  p = (int *)main;
+  printf("*p = %x\n", *p);
+  *p = 0x12345678;
+  printf("*p = %x\n", *p);
   return 0;
 }
