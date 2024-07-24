@@ -1,0 +1,220 @@
+% 非互換なパッケージに自動でパッチを当てる
+% https://qiita.com/wtsnjp/items/76557b1598445a1fc9da
+\RequirePackage{plautopatch}
+% pdfpagesの依存パッケージのエラー回避
+% https://okumuralab.org/tex/mod/forum/discuss.php?d=2956
+% https://github.com/aminophen/gentombow/issues/9
+\plautopatchdisable{eso-pic}
+% documentclassでdvipdfmx指定をするので個別パッケージでのドライバ指定は不要
+% https://qiita.com/Aruneko/items/13e015bce0112143f277
+\documentclass[autodetect-engine, dvi=dvipdfmx, 10pt, a4paper, ja=standard]{bxjsarticle}
+
+% 印刷時の用紙サイズ設定
+\usepackage{bxpapersize}% これでOK!
+
+% pdf-version
+\usepackage[1.4]{bxpdfver}
+
+% 日本語環境での字体修正
+\usepackage{otf}
+% フォントエンコーディングの名前をオプションで指定する
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}% Latin Modern フォントを使う
+
+% graphicx
+\usepackage{graphicx}
+\usepackage{grffile}% include graphicsの画像ファイル名の制限を撤廃
+
+% \begin{comment} ... \end{comment} で複数行コメントアウト
+\usepackage{comment}
+
+% 数学系 インライン数式を \[ \] と書く癖をつける
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{bm} % bold math
+
+% 化学
+\usepackage[version=4]{mhchem}
+
+% SI単位系
+\usepackage{siunitx}
+
+% 表関連
+\usepackage{multirow} % 表のセルの結合
+\usepackage{booktabs} % 表の線がすごくなる. Table Generatorを使うときはbooktabsモードにする
+\usepackage{caption} % キャプションをいじる
+\usepackage{float} % 図表を絶対にそこに置く確固たる意思
+
+% その他便利な子
+\usepackage{pdfpages} % pdfを挿入
+\usepackage[hyphens]{url} % urlをきれいに表示する
+\usepackage{ulem} % 下線を強化
+\usepackage[at]{easylist} % @をつかって箇条書き
+% \usepackage{minted}
+% \usepackage{termsim} % ターミナルを再現...誰得？
+
+% ハイパーリンクを生成
+% sectionなどで数式を使う場合は \texorpdfstring{texstring}{pdfstring}をする
+\usepackage{hyperref}
+\usepackage{pxjahyper}
+\usepackage{footnotebackref} % 脚注から本文へ飛べる
+
+
+% ここからはソースコードを表示する設定
+\usepackage{listings, plistings, color}
+\renewcommand{\lstlistingname}{Code}
+\definecolor{OliveGreen}{rgb}{0.0,0.6,0.0}
+\definecolor{Orenge}{rgb}{0.89,0.55,0}
+\definecolor{SkyBlue}{rgb}{0.28, 0.28, 0.95}
+\lstset{
+    language={Ruby}, % 言語の指定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex,
+    stepnumber=1,       % 行数の増間
+    numbersep=1zw,      % 行数の余白
+    xrightmargin=0zw,   % 左の余白
+    xleftmargin=2zw,    % 右の余白
+    framexleftmargin=18pt,  % フレームからの左の余白
+    keepspaces=true,    % スペースを省略せず保持
+    lineskip=-0.2ex,    % 枠線の途切れ防止
+    tabsize = 4,        % タブ数
+    showstringspaces=false,  %文字列中の半角スペースを表示させない
+    keywordstyle={\color{SkyBlue}},     %キーワード(int, ifなど)の書体指定
+    commentstyle={\color{OliveGreen}},  %注釈の書体
+    stringstyle=\color{Orenge}          %文字列
+}
+
+% \refだけで「図」や「式」を自動挿入
+% https://zenn.dev/arks/articles/3697b25d03f8a8
+% subfigureが文書にあると小節を参照する際に使う\subrefがおかしくなるので注意
+%% increase link area for cross-references and autoname them, [130514]
+\AtBeginDocument{\renewcommand{\ref}[1]{\mbox{\autoref{#1}}}}
+
+\def\equationautorefname~#1\null{式(#1)\null}
+\def\figureautorefname~#1\null{図#1\null}
+\def\subfigureautorefname#1\null{図#1\null}
+\def\tableautorefname~#1{表#1}
+\def\lstlistingautorefname~#1{コード#1}
+
+\def\partautorefname#1\null{第#1部\null}
+\def\chapterautorefname#1\null{第#1章\null}
+\def\sectionautorefname#1\null{#1節}
+\def\subsectionautorefname~#1\null{#1節}
+\def\subsubsectionautorefname#1\null{#1節}
+\def\paragraphautorefname#1\null{#1段落}
+\def\subparagraphautorefname#1\null{#1段落}
+
+\def\Itemautorefname#1\null{項目#1\null}
+\def\Hfootnoteautorefname#1\null{脚注#1\null}
+\def\theoremautorefname#1\null{定理#1\null}
+\def\FancyVerbLineautorefname#1\null{#1行\null}
+% \def\pageautorefname#1\null{ページ#1\null}
+\def\appendixautorefname#1\null{付録#1\null}
+
+
+\title{江戸の社会と数学 レポート}
+\author{学籍番号 2210342, 鈴木謙太郎}
+\date{\today}
+\begin{document}
+\maketitle
+
+
+\section{第3回}
+
+
+今回の講義では,中国の数学史が扱われた.主なトピックは古代中国の算術と天文学の発展,「九章算術」の内容だった.
+
+まず古代中国の算術では,計算道具としての算木（算籌）が取り上げられた.算木は四則演算や平方根,立方根,連立方程式などの複雑な計算にも用いられており,実際に具体的な解法も紹介され,体感することができた.
+
+次に,「九章算術」が紹介された.「九章算術」は紀元1世紀頃に成立したとされるが,正確な成立年代や編者は不明である.
+この書物は役人向けの算術の教科書として編纂され,全246問が収録されている.各章は異なる数学の問題を取り扱っており,「方田」では平面図形の面積計算,「粟米」は物価の比例式,「商功」は立体図形の体積計算を扱っていた.
+
+さらに,古代中国の天文学にも触れられた.古代中国では日食や月食,彗星の観測記録が厳密に行われ,これらの記録は春秋戦国時代から続いていた.天文学は政治とも結びつけられており,古来より天文現象の記録や暦法の発展が重視されていた.
+
+その後,近代ヨーロッパの数学は中国に導入された経緯についても触れられた.特にイエズス会のマテオ・リッチなどが中国に数学と天文学の知識を伝えたことが紹介された.彼らは他にも建築技術やテルミットの配合などたくさんの知識をもたらしており,驚いた.彼らの活動は,中国の社会エリートに数学や天文学の知識を広めるという戦略的側面も持っていたようである.
+
+このように,第3回の講義では,中国の数学史の重要な節目や人物・またその影響について広範にわたる内容が扱われた.
+
+
+\section{第6回}
+
+
+今回の講義では,江戸時代の数学者である関孝和が扱われた.主なトピックは彼の生涯と代表的な業績だった.
+
+まず関孝和の生涯が取り上げられた.彼は関氏の養子として育ち,1665年からは甲府藩主の下で御賄頭や御勘定之方御用改として働いていた.1674年に「発微算法」を刊行し,その後も「括要算法」など多くの著作を残した.なお,「括要算法」は,実際には彼の死後門人たちによって出版された.
+
+彼の門人には,建部賢弘や荒木村英などがおり,彼らもまた数学の分野で重要な業績を残している.特に建部賢弘は,関の業績を後世に伝える上で重要な役割を果たしており,「発微算法演段諺解」や「綴術算経」などの著作を通じて,関の数学を広めた.
+
+関孝和は,数々の数学的革新を成し遂げた.彼は「傍書法」という記号法を開発し,複数の未知数を効率的に扱うことができるようにすることで,従来の天元術では解決が難しかった高次連立方程式の解法を大きく進展させた.傍書法が導入されたことで,さまざまな複雑な問題が一元方程式の形に簡約化可能になり,数値解析が容易になった.
+
+また,関孝和は「角術」という一般の正多角形を題材とする分野でも顕著な成果を上げており,著書「括要算法」では,内接円や外接円の半径,面積を求める方法を理論的に解説している.
+
+このように,第6回の講義では関孝和の生涯や数学的革新,それが江戸時代の数学に与えた影響について学んだ.
+
+\section{第7回}
+
+
+今回の講義では,江戸時代の天文・暦学と,和算への応用について扱われた.特に日本における旧暦や,授時暦に基づく招差法とその応用について詳しく解説された.
+
+まず,江戸時代の日本で採用されていた暦が取り上げられた.この暦法は中国の太陰太陽暦やその運用制度にルーツをもっている.実際に日本で運用されていた旧暦では,1年が365.2422日の太陽暦と1年が354.3671日の太陰暦を併用し,ずれが大きくなる3ねんごとに閏月を挿入することで調整していた.
+
+次に,江戸時代の暦法や招差法について触れられた.日本最初の暦法である貞享暦は,授時暦と呼ばれるものを参考に作られている.授時暦では,「招差法」と呼ばれる解析手法が用いられている.これは,継続的な観測データに第3階差による補間を当てることで,比較的精度の良いなめらかな曲線で近似する方法である.
+講義では,招差法の具体的な手法が示され,応用例として弓形の弧の長さに対する近似が紹介された.
+
+また,実際に天文データを測定するための機器として圭表儀が紹介された.
+この機器は,太陽の南中時における影の長さを測ることで,南中高度を求めることができ,暦作りに利用されていた.
+
+講義後半では,「括要算法」を用いて,第6回でも触れられた内接円と外接円の問題の解説の読解を試みた.
+行っている操作は,意外にも現代において学生として学ぶ数学に近く,親近感が湧いた.
+
+\section{第11回}
+
+
+今回の講義では,江戸時代後期,関孝和以後の和算家たちの活動が扱われた.主なトピックは和算が趣味として広まる様子と実学としての発展,そして明治時代にかけての和算だった.
+
+まず,趣味としての和算について触れられた.1720年ごろよりあとから,和算は茶道や華道に近い,文化的な趣味の一つとして普及した.趣味としての和算は田舎の子供が学ぶほどに普及しており,これは和算塾での教育活動が行われたことが要因の一つとされている.家元制の和算塾では,定期的に集まって問題の出題と回答を行う主体的な学習スタイルや免許の認定なども行われ,コンテンツとしてかなり充実した物となっていた.
+
+また,和算の問題を集めた「算額」と呼ばれるものを競うように奉納するなどの風習もあり,
+和算は非武士の間でも広く親しまれていた.
+
+一方で,実学としての和算も発展していた.
+この背景として,趣味としての和算が発展したものの庶民からは実際になんの役に立つのかが疑問視されていたことが挙げられる.和算家たちは,専門的な数学知識を実用的に用いて,実学としての和算を発展させることで,和算の価値を有効性を強調していた.例えば,以前の講義でも触れられた暦の計算意外にも,
+地図の作成や土木・治水工事,財務管理,大砲の発射角度の算出など様々な分野において和算が活用されていた.
+
+最後に,和算のその後について触れられた.
+明治時代に入って社会制度が大きく変わるとともに,教育に使われる数学も和算から西洋数学に変わっていったが,一部地域では教育体系に和算が残っていた.
+また,和算塾も多くは消滅曽田が,関流などは昭和初期頃まで活動が続いていた.
+
+\section{第15回}
+
+今回の講義では,開陽丸という座礁・沈没した船とその発掘品,そしてそこから見つかった和算書について触れられた.
+
+まず,開陽丸という船の概要について触れられた.開陽丸は幕末に江戸幕府が発注し1866年までにオランダで作られた船だった.その後日本に持ち込まれ幕府に使われたが,戊辰戦争の際,榎本武揚をはじめとした旧幕府関係者が蝦夷地に逃げる際にも利用され,その後蝦夷地の江差で座礁・沈没した.
+
+その後,1974年頃から開陽丸の沈没現場付近は遺跡として認定され,引き揚げ調査が始まった.
+この調査はおよそ10年にわたって続き,船体の一部から砲弾,カトラリーなどを含む約33,000点もの遺物が発見された.
+
+その中には文書も多く含まれており,詳細が不明な断片が多く見つかっていた.
+断片の分析によって,それらは関孝和や武部賢弘らが関わった和算の総合書である「大成算経」や
+幕末に日本に入ってきた「暦算全書」,有馬頼徸の「極数変形草」など,和算書や暦算書の一部だと判明した.
+
+このような書物や資料は江戸幕府の天文方と呼ばれる部署が持っていたもので,
+徳川吉宗以降の幕府が西洋天文学を導入していく際に利用されていた.
+その後,戊辰戦争中に開陽丸が蝦夷地に向かう際に,これらの書物が開陽丸に積まれたとされている.
+
+\end{document}
