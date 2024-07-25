@@ -122,7 +122,7 @@ return 0;
 
 #### 駆動フレーム
 
-<img src="./images/callstack.png" width="33%" />
+<img src="./images/callstack.png" />
 
 ex: 再帰関数の呼び出しやリターンがどのように実現されているかを簡単に説明せよ.
 
@@ -259,7 +259,7 @@ count++;
 
 ### 多重定義とか
 
-<img src="./images/overload.png" width="33%" />
+<img src="./images/overload.png" />
 
 ```cpp
 class complex{
