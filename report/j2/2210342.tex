@@ -760,6 +760,80 @@ $a$と$b$に同じ入力をしていても,$k$を切り替えることで加算�
 	\label{fig:ex7}
 \end{figure}
 
+\newpage
+
+\section{問題8}
+
+実験資料で示された方法に従い,2種類の回路を実際にFPGAで動作させる実験を行った.
+
+\subsection{4ビット加算器の動作}
+
+まず,\ref{fig:ex8_add4}のような4ビット加算器をFGPAで動作させた.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{ex8_add4.png}
+	\caption{4ビット加算器の回路図}
+	\label{fig:ex8_add4}
+\end{figure}
+
+実際のFPGAでの動作は\ref{fig:ex8_add4_0001_0001}のようになった.
+
+SW1 ～ SW4にx, SW5 ～ SW8にyを入力し,LED01 ～ LED04に出力が表示されている.
+この出力例では$x = 0001, y = 0001$を入力したときの出力$x + y = 0010$が正しく表示されていることが確認できた.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ex8_add4_0001_0001.jpeg}
+	\caption{4ビット加算器の動作: 0001 + 0001 = 0010}
+	\label{fig:ex8_add4_0001_0001}
+\end{figure}
+
+また,\ref{fig:ex8_add4_1111_0001}のような繰り上がりが発生する場合においても,\ref{fig:ex8_add4}の実装通り$cu = 1$となっていることが確認できた.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ex8_add4_1111_0001.jpeg}
+	\caption{4ビット加算器の動作: 1111 + 0001 = 0000, cu = 1}
+	\label{fig:ex8_add4_1111_0001}
+\end{figure}
+
+\subsection{モジュールdoubleEqの動作}
+
+次に,\ref{code:mod-doubleeq}で作成したモジュールdoubleEqをFPGAで動作させた.
+入力a, b, c, dをSW1 ～ SW4に入力し,出力$s$をLED01に表示させた.
+
+\ref{fig:ex8_deq_0000}と\ref{fig:ex8_deq_0011}のように$a = b, c = d$のときのみ$s = 1$となるのでLED01が点灯し,
+\ref{fig:ex8_deq_0101}のように$a \neq b \lor c \neq d$のとき$s = 0$となるのでLED01が消灯することが確認できた.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ex8_deq_0000.jpeg}
+	\caption{モジュールdoubleEqの動作: a,b,c,d = 0000}
+	\label{fig:ex8_deq_0000}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ex8_deq_0011.jpeg}
+	\caption{モジュールdoubleEqの動作: a,b,c,d = 0011}
+	\label{fig:ex8_deq_0011}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{ex8_deq_0101.jpeg}
+	\caption{モジュールdoubleEqの動作: a,b,c,d = 0101}
+	\label{fig:ex8_deq_0101}
+\end{figure}
+
+\subsection{J1課題との比較}
+J1課題でもFPGAに回路を書き込んで動作させる実験を行っているが,問題8との違いとして回路の記述方法が挙げられる.
+J1課題ではQuartusを用いてGUI上で回路を構築する一方,本実験ではVerilog HDLを用いて回路を記述している.
+GUI上での回路記述は回路全体の見通しが立ちやすい一方で,Verilog HDLでの回路記述はより回路の動作が理解しやすい(特に組み合わせ回路)という違いがあると感じた.
+
 % \bibliography{hoge} %hoge.bibから拡張子を外した名前
 % \bibliographystyle{junsrt} %参考文献出力スタイル
 % 使用する際は latex-workshop.latex.recipe.default を
