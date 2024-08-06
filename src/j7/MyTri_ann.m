@@ -1,5 +1,5 @@
 function [x, y, e2n] = MyTri_ann(lx, ly, nx, ny)
-    % 矩形領域の長さ lx, ly と分割数 nx, ny に基づいて三角形の分割を行う
+    % 内径 lx, 外径ly と 半径方向の分割数nx, 円周方向の分割数ny に基づいて三角形の分割を行う
     % 出力:
     % x: 節点の x 座標
     % y: 節点の y 座標
