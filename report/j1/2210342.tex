@@ -1,0 +1,151 @@
+% 非互換なパッケージに自動でパッチを当てる
+% https://qiita.com/wtsnjp/items/76557b1598445a1fc9da
+\RequirePackage{plautopatch}
+% pdfpagesの依存パッケージのエラー回避
+% https://okumuralab.org/tex/mod/forum/discuss.php?d=2956
+% https://github.com/aminophen/gentombow/issues/9
+\plautopatchdisable{eso-pic}
+% documentclassでdvipdfmx指定をするので個別パッケージでのドライバ指定は不要
+% https://qiita.com/Aruneko/items/13e015bce0112143f277
+\documentclass[autodetect-engine, dvi=dvipdfmx, 10pt, a4paper, ja=standard]{bxjsarticle}
+
+% 印刷時の用紙サイズ設定
+\usepackage{bxpapersize}% これでOK!
+
+% pdf-version
+\usepackage[1.4]{bxpdfver}
+
+% 日本語環境での字体修正
+\usepackage{otf}
+% フォントエンコーディングの名前をオプションで指定する
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}% Latin Modern フォントを使う
+
+% graphicx
+\usepackage{graphicx}
+\usepackage{grffile}% include graphicsの画像ファイル名の制限を撤廃
+
+% \begin{comment} ... \end{comment} で複数行コメントアウト
+\usepackage{comment}
+
+% 数学系 インライン数式を \[ \] と書く癖をつける
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{bm} % bold math
+
+% 化学
+\usepackage[version=4]{mhchem}
+
+% SI単位系
+\usepackage{siunitx}
+
+% 表関連
+\usepackage{multirow} % 表のセルの結合
+\usepackage{booktabs} % 表の線がすごくなる. Table Generatorを使うときはbooktabsモードにする
+\usepackage{caption} % キャプションをいじる
+\usepackage{float} % 図表を絶対にそこに置く確固たる意思
+
+% その他便利な子
+\usepackage{pdfpages} % pdfを挿入
+\usepackage[hyphens]{url} % urlをきれいに表示する
+\usepackage{ulem} % 下線を強化
+\usepackage[at]{easylist} % @をつかって箇条書き
+% \usepackage{minted}
+% \usepackage{termsim} % ターミナルを再現...誰得？
+
+% ハイパーリンクを生成
+% sectionなどで数式を使う場合は \texorpdfstring{texstring}{pdfstring}をする
+\usepackage{hyperref}
+\usepackage{pxjahyper}
+\usepackage{footnotebackref} % 脚注から本文へ飛べる
+
+
+% ここからはソースコードを表示する設定
+\usepackage{listings, plistings, color}
+\renewcommand{\lstlistingname}{Code}
+\definecolor{OliveGreen}{rgb}{0.0,0.6,0.0}
+\definecolor{Orenge}{rgb}{0.89,0.55,0}
+\definecolor{SkyBlue}{rgb}{0.28, 0.28, 0.95}
+\lstset{
+    language={Ruby}, % 言語の指定
+    basicstyle={\ttfamily},
+    identifierstyle={\small},
+    commentstyle={\smallitshape},
+    keywordstyle={\small\bfseries},
+    ndkeywordstyle={\small},
+    stringstyle={\small\ttfamily},
+    frame={tb},
+    breaklines=true,
+    columns=[l]{fullflexible},
+    numbers=left,
+    xrightmargin=0zw,
+    xleftmargin=3zw,
+    numberstyle={\scriptsize},
+    stepnumber=1,
+    numbersep=1zw,
+    lineskip=-0.5ex,
+    stepnumber=1,       % 行数の増間
+    numbersep=1zw,      % 行数の余白
+    xrightmargin=0zw,   % 左の余白
+    xleftmargin=2zw,    % 右の余白
+    framexleftmargin=18pt,  % フレームからの左の余白
+    keepspaces=true,    % スペースを省略せず保持
+    lineskip=-0.2ex,    % 枠線の途切れ防止
+    tabsize = 4,        % タブ数
+    showstringspaces=false,  %文字列中の半角スペースを表示させない
+    keywordstyle={\color{SkyBlue}},     %キーワード(int, ifなど)の書体指定
+    commentstyle={\color{OliveGreen}},  %注釈の書体
+    stringstyle=\color{Orenge}          %文字列
+}
+
+% \refだけで「図」や「式」を自動挿入
+% https://zenn.dev/arks/articles/3697b25d03f8a8
+% subfigureが文書にあると小節を参照する際に使う\subrefがおかしくなるので注意
+%% increase link area for cross-references and autoname them, [130514]
+\AtBeginDocument{\renewcommand{\ref}[1]{\mbox{\autoref{#1}}}}
+
+\def\equationautorefname~#1\null{式(#1)\null}
+\def\figureautorefname~#1\null{図#1\null}
+\def\subfigureautorefname#1\null{図#1\null}
+\def\tableautorefname~#1{表#1}
+\def\lstlistingautorefname~#1{コード#1}
+
+\def\partautorefname#1\null{第#1部\null}
+\def\chapterautorefname#1\null{第#1章\null}
+\def\sectionautorefname#1\null{#1節}
+\def\subsectionautorefname~#1\null{#1節}
+\def\subsubsectionautorefname#1\null{#1節}
+\def\paragraphautorefname#1\null{#1段落}
+\def\subparagraphautorefname#1\null{#1段落}
+
+\def\Itemautorefname#1\null{項目#1\null}
+\def\Hfootnoteautorefname#1\null{脚注#1\null}
+\def\theoremautorefname#1\null{定理#1\null}
+\def\FancyVerbLineautorefname#1\null{#1行\null}
+% \def\pageautorefname#1\null{ページ#1\null}
+\def\appendixautorefname#1\null{付録#1\null}
+
+
+\title{MICS実験第一 J1課題レポート}
+\author{学籍番号 2210342, 鈴木謙太郎}
+\date{\today}
+\begin{document}
+\maketitle
+
+
+% \bibliography{hoge} %hoge.bibから拡張子を外した名前
+% \bibliographystyle{junsrt} %参考文献出力スタイル
+% 使用する際は latex-workshop.latex.recipe.default を
+% ptex2pdf (uplatex) → bibtex → ptex2pdf (uplatex) × 2
+% に変更
+
+\section{問題1}
+
+\subsection{目的}
+
+本問題では、FPGAにおいて、入力と出力を接続する方法を
+
+
+
+\end{document}
