@@ -171,14 +171,13 @@ LEDを接続することで,入力が与えられた際にLEDが点灯するよ�
 スイッチの入力がLEDの出力に反映されるようになっている.
 
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 	\centering
-	\includegraphics[width=\textwidth]{asset/ex1-トリミング.jpg}
+	\includegraphics[width=0.8\textwidth]{asset/ex1-トリミング.jpg}
 	\caption{問題1で設計した回路}
 	\label{fig:ex1}
 \end{figure}
 
-\end{document}
 
 \subsection{実験・測定結果}
 
@@ -200,3 +199,147 @@ FPGA上で動作させることを通じて,組み合わせ回路の設計方法
 この回路は,ゲート(AND,OR,NOTなど)のみを組み合わせることで構成される.
 
 
+\subsection{回路のアルゴリズム・設計}
+\label{sec:ex2-design}
+
+本問では,2ビットの入力$x = x_1 x_0$と$y = y_1 y_0$に対して,
+$x > y$のとき出力$z = 1$,それ以外のとき$z = 0$となる回路を設計する.
+なお,これらの入力は符号なしの2進数として扱うものとする.
+
+このような回路を作るにあたって,真理値表やカルノー図を用いることで
+簡略化された効率のよい論理回路を作ることができる.
+
+本問でも\ref{fig:ex2-karnaugh}のような真理値表とカルノー図を用いることで,
+出力$z$の論理式を\ref{eq:ex2}のように求めた.
+
+\begin{equation}
+	\label{eq:ex2}
+	z = x_0 y_1' y_0' + x_1 x_0 y_0' + x_1 y_1'
+\end{equation}
+
+
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex2_fig.png}
+	\caption{問題2で用いた真理値表とカルノー図}
+	\label{fig:ex2-karnaugh}
+\end{figure}
+
+
+実際の回路設計では,\ref{eq:ex2}の論理式をそのままゲートによる組み合わせ回路に変換することで,
+期待する出力を得ることが可能である.
+また,入力にはすべてトグルスイッチを用いた.
+
+\subsection{実際に設計した回路}
+
+\ref{eq:ex2}をもとに,\ref{fig:ex2}のような回路を設計した.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex2_trim.jpg}
+	\caption{問題2で設計した回路}
+	\label{fig:ex2}
+\end{figure}
+
+\subsection{実験・測定結果}
+
+実際にFPGAボードに書き込んだ結果,$x > y$のときに限りLEDが点灯し,$x = y$や$x < y$となるときは消灯することが確認できた.
+よって,期待する出力を得ることができていると考えられる.
+
+\section{問題3}
+
+\subsection{目的}
+本問では,D型フリップフロップを用いた微分回路を設計することで,順序回路の設計方法を理解することを目指す.
+
+\subsection{原理・理論}
+順序回路とは,組み合わせ回路とは異なり,出力が入力だけでなく過去の状態にも依存する回路のことである.
+このような回路は,フリップフロップなどの記憶素子を用いることで設計することができる.
+
+フリップフロップは,1ビットので０田を記憶できる素子である.特にD型フリップフロップは,
+データとクロック信号を入力として受け取り,クロックが立ち上がるときにD入力の値を出力に反映する.
+このような性質上,クロックはフリップフロップの動作を制御するために必要である.
+この入力を人の手で正確に切り替えることは難しいため,FPGAボードに備え付けられたクロック信号発生器を用いる.
+
+本問で作成する微分回路とは,入力信号の立ち上がりエッジを検出し,そのエッジが立ち上がるたびに出力信号をトグルする回路である.
+このような回路を作成することで,人間がスイッチを1回押したときに,1クロックの長さのパルスを1回だけ出力することができる.
+通常人がスイッチを操作すると,1クロック以上の信号が入力されてしまい,論理回路を正確にテストすることが難しいため,
+微分回路は論理回路のテストにおいて非常に有用である.
+
+\subsection{回路のアルゴリズム・設計}
+
+本問では,クロック信号を入力として受け取り,その立ち上がりエッジを検出する微分回路を設計する.
+
+フリップフロップなどを含む順序回路を設計する際には,出力が過去の状態に依存するため,
+状態遷移図などを作成して設計を行うことが一般的である.
+
+\ref{fig:ex3}のような回路を設計するにあたって,
+便宜上左側のD型フリップフロップの入力を$D_0$, 出力を$Q_0$とし,
+右側のD型フリップフロップの入力を$D_1$, 出力を$Q_1$とする.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3_notebook.png}
+	\caption{問題3で設計する微分回路の回路図(実験資料より引∑∑用)}
+	\label{fig:ex3}
+\end{figure}
+
+この回路の真理値表は\ref{fig:ex3-tf}のようになった.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3_tf.png}
+	\caption{問題3で用いた真理値表}
+	\label{fig:ex3-tf}
+\end{figure}
+
+これの真理値表をもとに,\ref{fig:ex3-state}のような状態遷移図を作成した.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3_state.png}
+	\caption{問題3で用いた状態遷移図}
+	\label{fig:ex3-state}
+\end{figure}
+
+ここで,状態00と状態01に注目すると,ともに0を入力すると0を出力して状態00に遷移し,
+1を入力すると1を出力して状態10に遷移することが分かる.よって,この2つの状態は同じものとみなせる.
+
+このような同じ状態が複数ある場合,その状態への遷移とその状態からの遷移をまとめることで,
+状態遷移図を\ref{fig:ex3-state-refine}のように簡略化することができる.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3_state_refine.png}
+	\caption{\ref{fig:ex3-state}を簡略化した後の状態遷移図}
+	\label{fig:ex3-state-refine}
+\end{figure}
+
+\subsection{実際に設計した回路}
+
+\ref{fig:ex3}の回路を,実験資料で示された2ビットカウンタ回路と接続し,
+\ref{fig:ex3-cropped}のような回路を設計した.
+これをQuartusのRTL Viewerで図持すると\ref{fig:ex3-rtl}のようになる.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3-cropped.jpg}
+	\caption{問題3で設計した回路}
+	\label{fig:ex3-cropped}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{asset/ex3_pretty.png}
+	\caption{\ref{fig:ex3-cropped}をRTL Viewerで表示したもの}
+	\label{fig:ex3-rtl}
+\end{figure}
+
+\subsection{実験・測定結果}
+
+実際にFPGAボードに書き込み,クロック信号を入力した状態で押しボタンを用いて動作を確認した.
+ボタンを押した長さにかかわらず,出力LEDに表示されるカウンタの値が1ずつ増加したので,
+微分回路が正常に動作していると考えられる.
+
+
+\end{document}
